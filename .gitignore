@@ -1,0 +1,28 @@
+# Build output
+build/
+
+# CMake
+CMakeUserPresets.json
+
+# VS Code
+.vscode/
+
+# Executables
+*.exe
+
+# Object files
+*.o
+*.obj
+
+# Libraries
+*.a
+*.lib
+
+# Debug symbols
+*.pdb
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
