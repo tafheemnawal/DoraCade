@@ -1,106 +1,52 @@
 #include <raylib.h>
-typedef struct
+#include "player.h"
+
+
+int main()
 {
-    float x;
-    float y;
-    float speed;
+    const int screenWidth = 1280;
+    const int screenHeight = 720;
 
-    int width;
-    int height;
 
-    Color color;
-} Player;
+    InitWindow(screenWidth, screenHeight, "DoraCade");
 
-void UpdatePlayer(Player *player, int screenWidth, int screenHeight, float dt)
-{ // update
-    if (IsKeyDown(KEY_D))
+
+    Player player;
+
+
+    InitPlayer(&player, screenWidth, screenHeight);
+
+    SetTargetFPS(60);
+
+
+    while (!WindowShouldClose())
     {
-        player->x += player->speed * dt;
-    }
-    if (IsKeyDown(KEY_A))
-    {
-        player->x -= player->speed * dt;
-    }
+        float dt = GetFrameTime();
 
-    if (IsKeyDown(KEY_W))
-    {
-        player->y -= player->speed * dt;
-    }
 
-    if (IsKeyDown(KEY_S))
-    {
-        player->y += player->speed * dt;
-    }
+        UpdatePlayer(&player, screenWidth, screenHeight, dt);
 
-    // Keep player inside the window
-    if (player->x < 0)
-    {
-        player->x = 0;
-    }
 
-    if (player->x > screenWidth - player->width)
-    {
-        player->x = screenWidth - player->width;
+        BeginDrawing();
+
+        ClearBackground(RAYWHITE);
+
+
+        DrawPlayer(&player);
+
+
+        DrawFPS(10,10);
+
+        DrawText("Welcome to DoraCade!",420,300,40,BLUE);
+        DrawText("Level 1",560,360,30,RED);
+
+
+        EndDrawing();
     }
 
-    if (player->y < 0)
-    {
-        player->y = 0;
-    }
 
-    if (player->y > screenHeight - player->height)
-    {
-        player->y = screenHeight - player->height;
-    }
+    CloseWindow();
+
+
+    return 0;
 }
-void DrawPlayer(Player *player)
-{
-    DrawRectangle(
-        player->x,
-        player->y,
-        player->width,
-        player->height,
-        player->color);
-}
-void InitPlayer(Player *player, int screenWidth, int screenHeight)
-{
-    player->width = 50;
-    player->height = 50;
-    player->x = (screenWidth - player->width) / 2;
-    player->y = (screenHeight - player->height) / 2;
-    player->speed = 300;
-    player->color = BLUE;
-}
-    int main(void)
-    {
-        const int screenWidth = 1280;
-        const int screenHeight = 720;
-
-        InitWindow(screenWidth, screenHeight, "DoraCade");
-
-        Player player;
-
-        InitPlayer(&player, screenWidth, screenHeight);
-        SetTargetFPS(60);
-
-        while (!WindowShouldClose())
-        {
-            float dt = GetFrameTime();
-            UpdatePlayer(&player, screenWidth, screenHeight, dt);
-
-            BeginDrawing();
-
-            ClearBackground(RAYWHITE);
-
-            DrawPlayer(&player);
-            DrawFPS(10, 10);
-            DrawText("Welcome to DoraCade!", 420, 300, 40, BLUE);
-            DrawText("Level 1", 560, 360, 30, RED);
-
-            EndDrawing();
-        }
-
-        CloseWindow();
-
-        return 0;
-    }
