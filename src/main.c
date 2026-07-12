@@ -1,11 +1,16 @@
 #include <raylib.h>
-#define PLAYER_SIZE 50
 typedef struct
 {
     float x;
     float y;
     float speed;
+
+    int width;
+    int height;
+
+    Color color;
 } Player;
+
 void UpdatePlayer(Player *player, int screenWidth, int screenHeight, float dt)
 { // update
     if (IsKeyDown(KEY_D))
@@ -33,9 +38,9 @@ void UpdatePlayer(Player *player, int screenWidth, int screenHeight, float dt)
         player->x = 0;
     }
 
-    if (player->x > screenWidth - PLAYER_SIZE)
+    if (player->x > screenWidth - player->width)
     {
-        player->x = screenWidth - PLAYER_SIZE;
+        player->x = screenWidth - player->width;
     }
 
     if (player->y < 0)
@@ -43,12 +48,20 @@ void UpdatePlayer(Player *player, int screenWidth, int screenHeight, float dt)
         player->y = 0;
     }
 
-    if (player->y > screenHeight - PLAYER_SIZE)
+    if (player->y > screenHeight - player->height)
     {
-        player->y = screenHeight - PLAYER_SIZE;
+        player->y = screenHeight - player->height;
     }
 }
-
+void DrawPlayer(Player *player)
+{
+    DrawRectangle(
+        player->x,
+        player->y,
+        player->width,
+        player->height,
+        BLUE);
+}
 int main(void)
 {
     const int screenWidth = 1280;
@@ -61,6 +74,9 @@ int main(void)
     player.x = 400;
     player.y = 300;
     player.speed = 300;
+    player.width = 50;
+    player.height = 50;
+    player.color = BLUE;
 
     SetTargetFPS(60);
 
@@ -72,12 +88,8 @@ int main(void)
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
-        DrawRectangle(
-            player.x,
-            player.y,
-            PLAYER_SIZE,
-            PLAYER_SIZE,
-            BLUE);
+
+        DrawPlayer(&player);
         DrawFPS(10, 10);
         DrawText("Welcome to DoraCade!", 420, 300, 40, BLUE);
         DrawText("Level 1", 560, 360, 30, RED);
