@@ -3,22 +3,24 @@
 void UpdatePlayer(Player *player, int screenWidth, int screenHeight, float dt)
 {
     const float gravity = 1000.0f;
-    player->velocityY += gravity * dt;
-    player->y += player->velocityY * dt;
 
+    // 1. Check for flap FIRST
     if (IsKeyPressed(KEY_SPACE))
     {
         player->velocityY = -400.0f;
     }
 
-    if (player->x < 0)
-    {
-        player->x = 0;
-    }
+    // 2. Apply gravity
+    player->velocityY += gravity * dt;
 
-    if (player->x > screenWidth - player->width)
+    // 3. Move player
+    player->y += player->velocityY * dt;
+
+    // 4. Handle collisions
+    if (player->y > screenHeight - player->height)
     {
-        player->x = screenWidth - player->width;
+        player->y = screenHeight - player->height;
+        player->velocityY = 0;
     }
 
     if (player->y < 0)
