@@ -1,6 +1,5 @@
 #include "player.h"
 
-
 void UpdatePlayer(Player *player, int screenWidth, int screenHeight, float dt)
 {
     if (IsKeyDown(KEY_D))
@@ -23,7 +22,6 @@ void UpdatePlayer(Player *player, int screenWidth, int screenHeight, float dt)
         player->y += player->speed * dt;
     }
 
-
     if (player->x < 0)
     {
         player->x = 0;
@@ -45,28 +43,39 @@ void UpdatePlayer(Player *player, int screenWidth, int screenHeight, float dt)
     }
 }
 
-
-
 void DrawPlayer(Player *player)
 {
-    DrawRectangle(
+    Rectangle source = {
+        0,
+        0,
+        (float)player->texture.width,
+        (float)player->texture.height};
+
+    Rectangle destination = {
         player->x,
         player->y,
-        player->width,
-        player->height,
-        player->color
-    );
+        64,
+        64};
+    Vector2 origin = {0, 0};
+
+    DrawTexturePro(
+        player->texture,
+        source,
+        destination,
+        origin,
+        0.0f,
+        WHITE);
 }
-
-
 
 void InitPlayer(Player *player, int screenWidth, int screenHeight)
 {
-    player->width = 50;
-    player->height = 50;
-
     player->speed = 300;
     player->color = BLUE;
+
+    player->texture = LoadTexture("../assets/textures/flying doraemon.png");
+
+    player->width = 64;
+    player->height = 64;
 
     player->x = (screenWidth - player->width) / 2;
     player->y = (screenHeight - player->height) / 2;

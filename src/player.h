@@ -12,7 +12,7 @@ typedef struct
 
     int width;
     int height;
-
+    Texture2D texture;
     Color color;
 
 } Player;
