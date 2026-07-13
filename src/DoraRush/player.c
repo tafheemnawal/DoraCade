@@ -1,3 +1,9 @@
+/*
+ * DoraCade
+ * Game: DoraRush
+ * File: player.c
+ * Purpose: Handles player movement, physics and rendering.
+ */
 #include "player.h"
 
 void UpdatePlayer(Player *player, int screenWidth, int screenHeight, float dt)
