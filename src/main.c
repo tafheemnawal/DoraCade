@@ -61,6 +61,7 @@ int main()
         }
 
         DrawFPS(10, 10);
+        DrawText(TextFormat("Score: %d", score), screenWidth / 2 - 60, 20, 30, DARKGRAY);
 
         EndDrawing();
     }
