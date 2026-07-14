@@ -61,4 +61,15 @@ void UpdateGadget(Gadget *gadget)
     }
 }
 
-
+void DrawGadget(Gadget gadget)
+{
+    if(gadget.active)
+    {
+        DrawCircle(
+            gadget.position.x,
+            gadget.position.y,
+            20,
+            RED
+        );
+    }
+}
