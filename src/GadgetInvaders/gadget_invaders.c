@@ -46,5 +46,19 @@ Gadget CreateGadget()
 
     return gadget;
 }
+void UpdateGadget(Gadget *gadget)
+{
+    if(gadget->active)
+    {
+        gadget->position.y += gadget->speed;
+
+
+        // If gadget reaches bottom
+        if(gadget->position.y > GetScreenHeight())
+        {
+            gadget->active = false;
+        }
+    }
+}
 
 
