@@ -1,6 +1,6 @@
 #include <raylib.h>
 #include "DoraRush/player.h"
-#include "DoraRush/pipe.h"
+#include "DoraRush/collision.h"
 
 int main()
 {
@@ -16,12 +16,26 @@ int main()
     InitPipe(&pipe, screenWidth);
     SetTargetFPS(60);
 
+    int gameOver = 0;
+
     while (!WindowShouldClose())
     {
         float dt = GetFrameTime();
 
-        UpdatePlayer(&player, screenWidth, screenHeight, dt);
-        UpdatePipe(&pipe, screenWidth, dt);
+        if (!gameOver)
+        {
+            // Update
+            UpdatePlayer(&player, screenWidth, screenHeight, dt);
+            UpdatePipe(&pipe, screenWidth, dt);
+
+            // All collisions in one place
+            if (CheckPipeCollision(&player, &pipe) ||
+                CheckCeilingCollision(&player) ||
+                CheckFloorCollision(&player, screenHeight))
+            {
+                gameOver = 1;
+            }
+        }
 
         BeginDrawing();
 
@@ -30,14 +44,15 @@ int main()
         DrawPlayer(&player);
         DrawPipe(&pipe, screenHeight);
 
-        DrawFPS(10, 10);
+        if (gameOver)
+        {
+            DrawText("GAME OVER", 500, 300, 40, RED);
+        }
 
-        DrawText("Welcome to DoraCade!", 420, 300, 40, BLUE);
-        DrawText("Level 1", 560, 360, 30, RED);
+        DrawFPS(10, 10);
 
         EndDrawing();
     }
-
     CloseWindow();
 
     return 0;
