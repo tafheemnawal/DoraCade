@@ -15,6 +15,7 @@ typedef struct
 } Coin;
 
 void InitCoin(Coin *coin, Pipe *pipe);
+void LoadCoinTexture(Coin *coin);
 void UpdateCoin(Coin *coin, Pipe *pipe);
 void DrawCoin(Coin *coin);
 int CheckCoinCollision(Player *player, Coin *coin);

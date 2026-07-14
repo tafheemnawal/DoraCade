@@ -17,6 +17,7 @@ int main()
     InitPlayer(&player, screenWidth, screenHeight);
     InitPipe(&pipe, screenWidth);
     InitCoin(&coin, &pipe);
+    LoadCoinTexture(&coin);
     SetTargetFPS(60);
 
     int gameState = 1;
@@ -77,6 +78,8 @@ int main()
 
         EndDrawing();
     }
+
+    UnloadCoinTexture(&coin);
     CloseWindow();
 
     return 0;
