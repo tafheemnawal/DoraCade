@@ -79,7 +79,7 @@ int main()
         BeginDrawing();
 
         DrawTexture(backgroundTexture, 0, 0, WHITE);
-        
+
         DrawPlayer(&player);
 
         for (int i = 0; i < PIPE_COUNT; i++)
@@ -127,6 +127,7 @@ int main()
         EndDrawing();
     }
     UnloadTexture(pipeTexture);
+    UnloadTexture(backgroundTexture);
 
     for (int i = 0; i < PIPE_COUNT; i++)
     {
