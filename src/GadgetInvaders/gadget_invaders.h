@@ -12,6 +12,19 @@ typedef enum
     BIG_LIGHT
 
 } GadgetType;
+typedef struct
+{
+    GadgetType type;   // Which gadget (door, copter, etc.)
+
+    Vector2 position;  // x and y position on screen
+
+    float speed;       // Falling speed
+
+    int points;        // Score when shot
+
+    bool active;       // Is this gadget currently falling?
+
+} Gadget;
  
 
 #endif
