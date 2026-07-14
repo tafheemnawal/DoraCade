@@ -48,7 +48,7 @@ int main()
                 gameState = 2;
             }
         }
-        
+
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
@@ -80,6 +80,7 @@ int main()
     }
 
     UnloadCoinTexture(&coin);
+    UnloadTexture(pipe.texture);
     CloseWindow();
 
     return 0;
