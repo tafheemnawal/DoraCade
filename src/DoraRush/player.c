@@ -12,7 +12,7 @@ void UpdatePlayer(Player *player, int screenWidth, int screenHeight, float dt)
 
     if (IsKeyPressed(KEY_SPACE))
     {
-        player->velocityY = -300.0f;
+        player->velocityY = -200.0f;
     }
 
     player->velocityY += gravity * dt;

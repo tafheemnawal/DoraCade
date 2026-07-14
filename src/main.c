@@ -1,7 +1,9 @@
 #include <raylib.h>
 #include "DoraRush/player.h"
 #include "DoraRush/pipe.h"
-#include "DoraRush/coin.h" 
+#include "DoraRush/coin.h"
+
+#define PIPE_COUNT 4
 
 int main()
 {
@@ -11,12 +13,20 @@ int main()
     InitWindow(screenWidth, screenHeight, "DoraCade");
 
     Player player;
-    Pipe pipe;
+    Pipe pipe[PIPE_COUNT];
     Coin coin;
 
     InitPlayer(&player, screenWidth, screenHeight);
-    InitPipe(&pipe, screenWidth);
-    InitCoin(&coin, &pipe);
+
+    for (int i = 0; i < PIPE_COUNT; i++)
+    {
+        InitPipe(&pipe[i], screenWidth);
+        pipe[i].x += i * 350;
+    }
+
+    // Coin follows the first pipe for now
+    InitCoin(&coin, &pipe[0]);
+
     SetTargetFPS(60);
 
     int gameState = 1;
@@ -29,22 +39,27 @@ int main()
         if (gameState == 1)
         {
             UpdatePlayer(&player, screenWidth, screenHeight, dt);
-            UpdatePipe(&pipe, screenWidth, dt);
-            UpdateCoin(&coin, &pipe);
 
-            if (CheckPipeScore(&player, &pipe))
+            for (int i = 0; i < PIPE_COUNT; i++)
             {
-                score++;
+                UpdatePipe(&pipe[i], screenWidth, dt);
+
+                if (CheckPipeScore(&player, &pipe[i]))
+                {
+                    score++;
+                }
+
+                if (CheckPipeCollision(&player, &pipe[i], screenHeight))
+                {
+                    gameState = 2;
+                }
             }
 
-            if (CheckCoinCollision(&player, &coin))  
+            UpdateCoin(&coin, &pipe[0]);
+
+            if (CheckCoinCollision(&player, &coin))
             {
                 score += 5;
-            }
-
-            if (CheckPipeCollision(&player, &pipe, screenHeight))
-            {
-                gameState = 2;
             }
         }
 
@@ -53,7 +68,12 @@ int main()
         ClearBackground(RAYWHITE);
 
         DrawPlayer(&player);
-        DrawPipe(&pipe, screenHeight);
+
+        for (int i = 0; i < PIPE_COUNT; i++)
+        {
+            DrawPipe(&pipe[i], screenHeight);
+        }
+
         DrawCoin(&coin);
 
         if (gameState == 2)
@@ -65,19 +85,34 @@ int main()
         if (IsKeyPressed(KEY_R) && gameState == 2)
         {
             InitPlayer(&player, screenWidth, screenHeight);
-            InitPipe(&pipe, screenWidth);
-            InitCoin(&coin, &pipe);
-            score = 0;
 
+            for (int i = 0; i < PIPE_COUNT; i++)
+            {
+                InitPipe(&pipe[i], screenWidth);
+                pipe[i].x += i * 350;
+            }
+
+            InitCoin(&coin, &pipe[0]);
+
+            score = 0;
             gameState = 1;
         }
 
         DrawFPS(10, 10);
-        DrawText(TextFormat("Score: %d", score), screenWidth / 2 - 60, 20, 30, DARKGRAY);
+        DrawText(TextFormat("Score: %d", score),
+                 screenWidth / 2 - 60,
+                 20,
+                 30,
+                 DARKGRAY);
 
         EndDrawing();
     }
-    UnloadTexture(pipe.texture);
+
+    for (int i = 0; i < PIPE_COUNT; i++)
+    {
+        UnloadTexture(pipe[i].texture);
+    }
+
     CloseWindow();
 
     return 0;
