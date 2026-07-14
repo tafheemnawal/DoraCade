@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include "DoraRush/player.h"
 #include "DoraRush/pipe.h"
+#include "DoraRush/coin.h" 
 
 int main()
 {
@@ -11,9 +12,11 @@ int main()
 
     Player player;
     Pipe pipe;
+    Coin coin;
 
     InitPlayer(&player, screenWidth, screenHeight);
     InitPipe(&pipe, screenWidth);
+    InitCoin(&coin, &pipe);
     SetTargetFPS(60);
 
     int gameState = 1;
@@ -27,10 +30,16 @@ int main()
         {
             UpdatePlayer(&player, screenWidth, screenHeight, dt);
             UpdatePipe(&pipe, screenWidth, dt);
+            UpdateCoin(&coin, &pipe);
 
             if (CheckPipeScore(&player, &pipe))
             {
                 score++;
+            }
+
+            if (CheckCoinCollision(&player, &coin))  
+            {
+                score += 5;
             }
 
             if (CheckPipeCollision(&player, &pipe, screenHeight))
@@ -45,6 +54,7 @@ int main()
 
         DrawPlayer(&player);
         DrawPipe(&pipe, screenHeight);
+        DrawCoin(&coin);
 
         if (gameState == 2)
         {
@@ -56,6 +66,7 @@ int main()
         {
             InitPlayer(&player, screenWidth, screenHeight);
             InitPipe(&pipe, screenWidth);
+            InitCoin(&coin, &pipe);
             score = 0;
 
             gameState = 1;

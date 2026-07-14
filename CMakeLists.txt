@@ -11,5 +11,6 @@ add_executable(DoraCade
     src/GadgetInvaders/gadget_invaders.c
     src/DoraRush/player.c
     src/DoraRush/pipe.c
+    src/DoraRush/coin.c
 )
 target_link_libraries(DoraCade PRIVATE raylib)
