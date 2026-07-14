@@ -10,8 +10,6 @@ void InitPipe(Pipe *pipe, int screenWidth)
 
     pipe->scored = 0;
     pipe->justRespawned = 0;
-
-    pipe->texture = LoadTexture("../assets/textures/pipe.png");
 }
 
 void UpdatePipe(Pipe *pipe, int screenWidth, float dt)
@@ -32,13 +30,13 @@ void UpdatePipe(Pipe *pipe, int screenWidth, float dt)
     }
 }
 
-void DrawPipe(Pipe *pipe, int screenHeight)
+void DrawPipe(Pipe *pipe, Texture2D texture, int screenHeight)
 {
     Rectangle source = {
         534,
         0,
         309,
-        (float)pipe->texture.height};
+        (float)texture.height};
 
     Rectangle destTop = {
         pipe->x,
@@ -47,7 +45,7 @@ void DrawPipe(Pipe *pipe, int screenHeight)
         pipe->gapY};
 
     DrawTexturePro(
-        pipe->texture,
+        texture,
         source,
         destTop,
         (Vector2){0, 0},
@@ -61,7 +59,7 @@ void DrawPipe(Pipe *pipe, int screenHeight)
         pipe->width,
         screenHeight - (pipe->gapY + pipe->gapHeight)};
     DrawTexturePro(
-        pipe->texture,
+        texture,
         source,
         destBottom,
         (Vector2){0, 0},
