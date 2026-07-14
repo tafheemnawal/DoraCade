@@ -12,6 +12,7 @@ typedef struct
     float gapHeight;
 
     int scored;
+    int justRespawned;
 
     Texture2D texture;
 
