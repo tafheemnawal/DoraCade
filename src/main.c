@@ -38,7 +38,7 @@ int main()
                 gameState = 2;
             }
         }
-        
+
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
@@ -66,6 +66,7 @@ int main()
 
         EndDrawing();
     }
+    UnloadTexture(pipe.texture);
     CloseWindow();
 
     return 0;

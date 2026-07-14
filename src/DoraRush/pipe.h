@@ -13,6 +13,8 @@ typedef struct
 
     int scored;
 
+    Texture2D texture;
+
 } Pipe;
 
 void InitPipe(Pipe *pipe, int screenWidth);
@@ -21,5 +23,6 @@ void DrawPipe(Pipe *pipe, int screenHeight);
 
 int CheckPipeCollision(Player *player, Pipe *pipe, int screenHeight);
 int CheckPipeScore(Player *player, Pipe *pipe); 
+
 
 #endif
