@@ -28,3 +28,29 @@ void DrawCoin(Coin *coin)
         DrawCircle(coin->x, coin->y, coin->radius, YELLOW);
     }
 }
+
+int CheckCoinCollision(Player *player, Coin *coin)
+{
+    if (coin->collected)
+    {
+        return 0;
+    }
+
+    Rectangle playerRect =
+    {
+        player->x,
+        player->y,
+        player->width,
+        player->height
+    };
+
+    Vector2 coinCenter = { coin->x, coin->y };
+
+    if (CheckCollisionCircleRec(coinCenter, coin->radius, playerRect))
+    {
+        coin->collected = 1;
+        return 1;
+    }
+
+    return 0;
+}
