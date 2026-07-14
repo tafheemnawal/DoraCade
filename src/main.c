@@ -42,7 +42,13 @@ int main()
 
             for (int i = 0; i < PIPE_COUNT; i++)
             {
-                UpdatePipe(&pipe[i], screenWidth, dt);
+                UpdatePipe(
+    &pipe[i],
+    pipe,
+    PIPE_COUNT,
+    screenWidth,
+    dt
+);
 
                 if (CheckPipeScore(&player, &pipe[i]))
                 {

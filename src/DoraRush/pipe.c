@@ -12,7 +12,11 @@ void InitPipe(Pipe *pipe, int screenWidth)
     pipe->justRespawned = 0;
 }
 
-void UpdatePipe(Pipe *pipe, int screenWidth, float dt)
+void UpdatePipe(Pipe *pipe,
+                Pipe pipes[],
+                int pipeCount,
+                int screenWidth,
+                float dt)
 {
 #define PIPE_SPEED 300.0f
 
@@ -24,7 +28,7 @@ void UpdatePipe(Pipe *pipe, int screenWidth, float dt)
     // Respawn if it leaves the screen
     if (pipe->x + pipe->width < 0)
     {
-        pipe->x = screenWidth + GetRandomValue(20, 500);
+        pipe->x = GetRightmostPipeX(pipes, pipeCount) + 350;
         pipe->gapY = GetRandomValue(100, 540);
         pipe->scored = 0; 
     }
@@ -65,6 +69,21 @@ void DrawPipe(Pipe *pipe, Texture2D texture, int screenHeight)
         (Vector2){0, 0},
         0,
         WHITE);
+}
+
+float GetRightmostPipeX(Pipe pipes[], int pipeCount)
+{
+    float rightmost = pipes[0].x;
+
+    for (int i = 1; i < pipeCount; i++)
+    {
+        if (pipes[i].x > rightmost)
+        {
+            rightmost = pipes[i].x;
+        }
+    }
+
+    return rightmost;
 }
 int CheckPipeCollision(Player *player, Pipe *pipe, int screenHeight)
 {

@@ -15,9 +15,13 @@ typedef struct
     int justRespawned;
 
 } Pipe;
-
+float GetRightmostPipeX(Pipe pipes[], int pipeCount);
 void InitPipe(Pipe *pipe, int screenWidth);
-void UpdatePipe(Pipe *pipe,int screenWidth, float dt);
+void UpdatePipe(Pipe *pipe,
+                Pipe pipes[],
+                int pipeCount,
+                int screenWidth,
+                float dt);
 void DrawPipe(Pipe *pipe, Texture2D texture, int screenHeight);
 
 int CheckPipeCollision(Player *player, Pipe *pipe, int screenHeight);
