@@ -1,4 +1,6 @@
 #include "gadget_invaders.h"
+#include <stdlib.h>
+#include <stddef.h>
 
 static int GetGadgetPoints(GadgetType type)
 {
