@@ -8,11 +8,14 @@ void InitPipe(Pipe *pipe, int screenWidth)
     pipe->width = 80;
     pipe->gapHeight = 180;
     pipe->scored = 0;
+    pipe->justRespawned = 0;
 }
 
 void UpdatePipe(Pipe *pipe, int screenWidth, float dt)
 {
 #define PIPE_SPEED 300.0f
+
+    pipe->justRespawned = 0;
 
     // Move pipe left
     pipe->x -= PIPE_SPEED * dt;
@@ -23,6 +26,7 @@ void UpdatePipe(Pipe *pipe, int screenWidth, float dt)
         pipe->x = screenWidth + GetRandomValue(100, 500);
         pipe->gapY = GetRandomValue(100, 540);
         pipe->scored = 0; 
+        pipe->justRespawned = 1;
     }
 }
 
