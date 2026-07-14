@@ -15,7 +15,7 @@ int main()
 
     Player player;
     Pipe pipe[PIPE_COUNT];
-    Coin coin;
+    Coin coin[PIPE_COUNT];
 
     InitPlayer(&player, screenWidth, screenHeight);
 
@@ -25,8 +25,11 @@ int main()
         pipe[i].x += i * 350;
     }
 
-    InitCoin(&coin, &pipe[0]);
-    LoadCoinTexture(&coin);
+    for (int i = 0; i < PIPE_COUNT; i++)
+    {
+        InitCoin(&coin[i], &pipe[i]);
+        LoadCoinTexture(&coin[i]);
+    }
 
     SetTargetFPS(60);
     int gameState = 1;
@@ -43,12 +46,12 @@ int main()
             for (int i = 0; i < PIPE_COUNT; i++)
             {
                 UpdatePipe(
-    &pipe[i],
-    pipe,
-    PIPE_COUNT,
-    screenWidth,
-    dt
-);
+                    &pipe[i],
+                    pipe,
+                    PIPE_COUNT,
+                    screenWidth,
+                    dt
+                );
 
                 if (CheckPipeScore(&player, &pipe[i]))
                 {
@@ -61,11 +64,14 @@ int main()
                 }
             }
 
-            UpdateCoin(&coin, &pipe[0]);
-
-            if (CheckCoinCollision(&player, &coin))
+            for (int i = 0; i < PIPE_COUNT; i++)
             {
-                score += 5;
+                UpdateCoin(&coin[i], &pipe[i]);
+
+                if (CheckCoinCollision(&player, &coin[i]))
+                {
+                    score += 5;
+                }
             }
         }
 
@@ -80,7 +86,10 @@ int main()
             DrawPipe(&pipe[i], pipeTexture, screenHeight);
         }
 
-        DrawCoin(&coin);
+        for (int i = 0; i < PIPE_COUNT; i++)
+        {
+            DrawCoin(&coin[i]);
+        }
 
         if (gameState == 2)
         {
@@ -98,7 +107,10 @@ int main()
                 pipe[i].x += i * 350;
             }
 
-            InitCoin(&coin, &pipe[0]);
+            for (int i = 0; i < PIPE_COUNT; i++)
+            {
+                InitCoin(&coin[i], &pipe[i]);
+            }
 
             score = 0;
             gameState = 1;
@@ -115,7 +127,10 @@ int main()
     }
     UnloadTexture(pipeTexture);
 
-    UnloadCoinTexture(&coin);
+    for (int i = 0; i < PIPE_COUNT; i++)
+    {
+        UnloadCoinTexture(&coin[i]);
+    }
     CloseWindow();
 
     return 0;

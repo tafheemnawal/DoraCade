@@ -31,6 +31,7 @@ void UpdatePipe(Pipe *pipe,
         pipe->x = GetRightmostPipeX(pipes, pipeCount) + 350;
         pipe->gapY = GetRandomValue(100, 540);
         pipe->scored = 0; 
+        pipe->justRespawned = 1;
     }
 }
 

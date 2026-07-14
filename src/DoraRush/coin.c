@@ -5,7 +5,7 @@ void InitCoin(Coin *coin, Pipe *pipe)
 {
     coin->x = pipe->x + pipe->width / 2;
     coin->y = pipe->gapY + pipe->gapHeight / 2;
-    coin->radius = 22;
+    coin->radius = 35;
     coin->collected = 0;
 }
 
@@ -35,7 +35,7 @@ void DrawCoin(Coin *coin)
 {
     if (!coin->collected)
     {
-        float displaySize = 45.0f;
+        float displaySize = 70.0f;
 
         Rectangle source = {
             0, 0,
