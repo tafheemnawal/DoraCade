@@ -1,7 +1,56 @@
 #include "gadget_invaders.h"
 #include <stdlib.h>
 
+static int GetGadgetPoints(GadgetType type)
+{
+    switch(type)
+    {
+        case ANYWHERE_DOOR:
+            return 50;
 
+        case BAMBOO_COPTER:
+            return 10;
+
+        case TIME_MACHINE:
+            return 100;
+
+        case SMALL_LIGHT:
+            return 20;
+
+        case BIG_LIGHT:
+            return 40;
+
+        default:
+            return 0;
+    }
+}
+
+
+// Helper function: temporary colors
+// Later replaced with PNG textures
+static Color GetGadgetColor(GadgetType type)
+{
+    switch(type)
+    {
+        case ANYWHERE_DOOR:
+            return BLUE;
+
+        case BAMBOO_COPTER:
+            return GREEN;
+
+        case TIME_MACHINE:
+            return PURPLE;
+
+        case SMALL_LIGHT:
+            return YELLOW;
+
+        case BIG_LIGHT:
+            return RED;
+
+        default:
+            return WHITE;
+    }
+}
 // Create a new gadget
 Gadget CreateGadget()
 {
@@ -11,7 +60,7 @@ Gadget CreateGadget()
     gadget.type = GetRandomValue(0, 4);
 
     // Starting position
-    gadget.position.x = GetRandomValue(50, 750);
+    gadget.position.x = GetRandomValue(50, 750); 
     gadget.position.y = -50;
 
     // High falling speed
