@@ -73,3 +73,14 @@ void DrawGadget(Gadget gadget)
         );
     }
 }
+void ResetGadget(Gadget *gadget)
+{
+    gadget->type = GetRandomValue(0,4);
+
+    gadget->position.x = GetRandomValue(50,750);
+    gadget->position.y = -50;
+
+    gadget->speed = GetRandomValue(5,10);
+
+    gadget->active = true;
+}
