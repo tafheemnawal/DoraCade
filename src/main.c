@@ -12,6 +12,7 @@ int main()
 
     InitWindow(screenWidth, screenHeight, "DoraCade");
     Texture2D pipeTexture = LoadTexture("../assets/textures/pipe.png");
+    Texture2D backgroundTexture = LoadTexture("../assets/textures/background.png");
 
     Player player;
     Pipe pipe[PIPE_COUNT];
