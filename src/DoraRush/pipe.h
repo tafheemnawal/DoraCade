@@ -11,6 +11,8 @@ typedef struct
     float width;
     float gapHeight;
 
+    int scored;
+
 } Pipe;
 
 void InitPipe(Pipe *pipe, int screenWidth);
