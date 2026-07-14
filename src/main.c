@@ -17,6 +17,7 @@ int main()
     SetTargetFPS(60);
 
     int gameState = 1;
+    int score = 0;
 
     while (!WindowShouldClose())
     {
@@ -26,6 +27,11 @@ int main()
         {
             UpdatePlayer(&player, screenWidth, screenHeight, dt);
             UpdatePipe(&pipe, screenWidth, dt);
+
+            if (CheckPipeScore(&player, &pipe))
+            {
+                score++;
+            }
 
             if (CheckPipeCollision(&player, &pipe, screenHeight))
             {
@@ -49,6 +55,7 @@ int main()
         {
             InitPlayer(&player, screenWidth, screenHeight);
             InitPipe(&pipe, screenWidth);
+            score = 0;
 
             gameState = 1;
         }
