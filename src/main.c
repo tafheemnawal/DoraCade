@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include "DoraRush/player.h"
+#include "DoraRush/pipe.h"
 
 int main()
 {
@@ -9,8 +10,10 @@ int main()
     InitWindow(screenWidth, screenHeight, "DoraCade");
 
     Player player;
+    Pipe pipe;
 
     InitPlayer(&player, screenWidth, screenHeight);
+    InitPipe(&pipe, screenWidth);
     SetTargetFPS(60);
 
     while (!WindowShouldClose())
@@ -18,12 +21,14 @@ int main()
         float dt = GetFrameTime();
 
         UpdatePlayer(&player, screenWidth, screenHeight, dt);
+        UpdatePipe(&pipe, screenWidth, dt);
 
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
 
         DrawPlayer(&player);
+        DrawPipe(&pipe, screenHeight);
 
         DrawFPS(10, 10);
 

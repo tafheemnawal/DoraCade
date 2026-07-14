@@ -9,5 +9,6 @@ find_package(raylib REQUIRED)
 add_executable(DoraCade
     src/main.c
     src/DoraRush/player.c
+    src/DoraRush/pipe.c
 )
 target_link_libraries(DoraCade PRIVATE raylib)

@@ -1,0 +1,46 @@
+#include "pipe.h"
+#include <raylib.h>
+
+void InitPipe(Pipe *pipe, int screenWidth)
+{
+    pipe->x = screenWidth + 200;
+    pipe->gapY = 350;
+    pipe->width = 80;
+    pipe->gapHeight = 180;
+}
+
+void UpdatePipe(Pipe *pipe, int screenWidth, float dt)
+{
+    const float PIPE_SPEED = 300.0f;
+
+    // Move pipe left
+    pipe->x -= PIPE_SPEED * dt;
+
+    // Respawn if it leaves the screen
+    if (pipe->x + pipe->width < 0)
+    {
+        pipe->x = screenWidth + GetRandomValue(100, 500);
+        pipe->gapY = GetRandomValue(100, 540);
+    }
+}
+
+void DrawPipe(Pipe *pipe, int screenHeight)
+{
+    // Top pipe
+    DrawRectangle(
+        pipe->x,
+        0,
+        pipe->width,
+        pipe->gapY,
+        GREEN
+    );
+
+    // Bottom pipe
+    DrawRectangle(
+        pipe->x,
+        pipe->gapY + pipe->gapHeight,
+        pipe->width,
+        screenHeight - (pipe->gapY + pipe->gapHeight),
+        GREEN
+    );
+}
