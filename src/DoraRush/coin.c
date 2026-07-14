@@ -35,7 +35,24 @@ void DrawCoin(Coin *coin)
 {
     if (!coin->collected)
     {
-        DrawCircle(coin->x, coin->y, coin->radius, YELLOW);
+        float displaySize = 45.0f;
+
+        Rectangle source = {
+            0, 0,
+            (float)coin->texture.width,
+            (float)coin->texture.height
+        };
+
+        Rectangle dest = {
+            coin->x,
+            coin->y,
+            displaySize,
+            displaySize
+        };
+
+        Vector2 origin = { displaySize / 2, displaySize / 2 };
+
+        DrawTexturePro(coin->texture, source, dest, origin, 0.0f, WHITE);
     }
 }
 
