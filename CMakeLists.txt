@@ -10,6 +10,7 @@ add_executable(DoraCade
     src/main.c
     src/player.c
     src/GadgetInvaders/gadget_invaders.c
+    src/DoraRush/player.c
+    src/DoraRush/pipe.c
 )
-
 target_link_libraries(DoraCade PRIVATE raylib)

@@ -1,46 +1,23 @@
+/*
+ * DoraCade
+ * Game: DoraRush
+ * File: player.c
+ * Purpose: Handles player movement, physics and rendering.
+ */
 #include "player.h"
 
 void UpdatePlayer(Player *player, int screenWidth, int screenHeight, float dt)
 {
-    if (IsKeyDown(KEY_D))
+    const float gravity = 1000.0f;
+
+    if (IsKeyPressed(KEY_SPACE))
     {
-        player->x += player->speed * dt;
+        player->velocityY = -300.0f;
     }
 
-    if (IsKeyDown(KEY_A))
-    {
-        player->x -= player->speed * dt;
-    }
+    player->velocityY += gravity * dt;
 
-    if (IsKeyDown(KEY_W))
-    {
-        player->y -= player->speed * dt;
-    }
-
-    if (IsKeyDown(KEY_S))
-    {
-        player->y += player->speed * dt;
-    }
-
-    if (player->x < 0)
-    {
-        player->x = 0;
-    }
-
-    if (player->x > screenWidth - player->width)
-    {
-        player->x = screenWidth - player->width;
-    }
-
-    if (player->y < 0)
-    {
-        player->y = 0;
-    }
-
-    if (player->y > screenHeight - player->height)
-    {
-        player->y = screenHeight - player->height;
-    }
+    player->y += player->velocityY * dt;
 }
 
 void DrawPlayer(Player *player)
@@ -54,8 +31,8 @@ void DrawPlayer(Player *player)
     Rectangle destination = {
         player->x,
         player->y,
-        64,
-        64};
+        84,
+        84};
     Vector2 origin = {0, 0};
 
     DrawTexturePro(
@@ -69,13 +46,13 @@ void DrawPlayer(Player *player)
 
 void InitPlayer(Player *player, int screenWidth, int screenHeight)
 {
-    player->speed = 300;
+    player->velocityY = 0.0f;
     player->color = BLUE;
 
     player->texture = LoadTexture("../assets/textures/flying doraemon.png");
 
-    player->width = 64;
-    player->height = 64;
+    player->width = 84;
+    player->height = 84;
 
     player->x = (screenWidth - player->width) / 2;
     player->y = (screenHeight - player->height) / 2;
