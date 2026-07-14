@@ -5,8 +5,18 @@ void InitCoin(Coin *coin, Pipe *pipe)
 {
     coin->x = pipe->x + pipe->width / 2;
     coin->y = pipe->gapY + pipe->gapHeight / 2;
-    coin->radius = 15;
+    coin->radius = 22;
     coin->collected = 0;
+}
+
+void LoadCoinTexture(Coin *coin)
+{
+    coin->texture = LoadTexture("assets/textures/doracake.png");
+}
+
+void UnloadCoinTexture(Coin *coin)
+{
+    UnloadTexture(coin->texture);
 }
 
 void UpdateCoin(Coin *coin, Pipe *pipe)
