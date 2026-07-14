@@ -11,7 +11,7 @@ void InitPipe(Pipe *pipe, int screenWidth)
 
 void UpdatePipe(Pipe *pipe, int screenWidth, float dt)
 {
-    const float PIPE_SPEED = 300.0f;
+#define PIPE_SPEED 300.0f
 
     // Move pipe left
     pipe->x -= PIPE_SPEED * dt;
@@ -32,8 +32,7 @@ void DrawPipe(Pipe *pipe, int screenHeight)
         0,
         pipe->width,
         pipe->gapY,
-        GREEN
-    );
+        GREEN);
 
     // Bottom pipe
     DrawRectangle(
@@ -41,6 +40,39 @@ void DrawPipe(Pipe *pipe, int screenHeight)
         pipe->gapY + pipe->gapHeight,
         pipe->width,
         screenHeight - (pipe->gapY + pipe->gapHeight),
-        GREEN
-    );
+        GREEN);
+}
+int CheckPipeCollision(Player *player, Pipe *pipe, int screenHeight)
+{
+    Rectangle playerRect =
+    {
+        player->x,
+        player->y,
+        player->width,
+        player->height
+    };
+
+    Rectangle topPipeRect =
+    {
+        pipe->x,
+        0,
+        pipe->width,
+        pipe->gapY
+    };
+
+    Rectangle bottomPipeRect =
+    {
+        pipe->x,
+        pipe->gapY + pipe->gapHeight,
+        pipe->width,
+        screenHeight - (pipe->gapY + pipe->gapHeight)
+    };
+
+    if (CheckCollisionRecs(playerRect, topPipeRect) ||
+        CheckCollisionRecs(playerRect, bottomPipeRect))
+    {
+        return 1;
+    }
+
+    return 0;
 }

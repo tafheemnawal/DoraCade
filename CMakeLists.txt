@@ -10,6 +10,5 @@ add_executable(DoraCade
     src/main.c
     src/DoraRush/player.c
     src/DoraRush/pipe.c
-    src/DoraRush/collision.c
 )
 target_link_libraries(DoraCade PRIVATE raylib)

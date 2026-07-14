@@ -1,6 +1,6 @@
 #include <raylib.h>
 #include "DoraRush/player.h"
-#include "DoraRush/collision.h"
+#include "DoraRush/pipe.h"
 
 int main()
 {
@@ -16,27 +16,22 @@ int main()
     InitPipe(&pipe, screenWidth);
     SetTargetFPS(60);
 
-    int gameOver = 0;
+    int gameState = 1;
 
     while (!WindowShouldClose())
     {
         float dt = GetFrameTime();
 
-        if (!gameOver)
+        if (gameState == 1)
         {
-            // Update
             UpdatePlayer(&player, screenWidth, screenHeight, dt);
             UpdatePipe(&pipe, screenWidth, dt);
 
-            // All collisions in one place
-            if (CheckPipeCollision(&player, &pipe) ||
-                CheckCeilingCollision(&player) ||
-                CheckFloorCollision(&player, screenHeight))
+            if (CheckPipeCollision(&player, &pipe, screenHeight))
             {
-                gameOver = 1;
+                gameState = 2;
             }
         }
-
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
@@ -44,9 +39,18 @@ int main()
         DrawPlayer(&player);
         DrawPipe(&pipe, screenHeight);
 
-        if (gameOver)
+        if (gameState == 2)
         {
-            DrawText("GAME OVER", 500, 300, 40, RED);
+            DrawText("GAME OVER", 470, 300, 50, RED);
+            DrawText("Press R to Restart", 430, 360, 25, DARKGRAY);
+        }
+
+       if (IsKeyPressed(KEY_R) && gameState == 2)
+        {
+            InitPlayer(&player, screenWidth, screenHeight);
+            InitPipe(&pipe, screenWidth);
+
+            gameState = 1;
         }
 
         DrawFPS(10, 10);
