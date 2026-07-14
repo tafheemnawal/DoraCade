@@ -7,7 +7,11 @@ void InitPipe(Pipe *pipe, int screenWidth)
     pipe->gapY = 350;
     pipe->width = 90;
     pipe->gapHeight = 180;
+
     pipe->scored = 0;
+    pipe->justRespawned = 0;
+
+    pipe->texture = LoadTexture("../assets/textures/pipe.png");
 }
 
 void UpdatePipe(Pipe *pipe, int screenWidth, float dt)
