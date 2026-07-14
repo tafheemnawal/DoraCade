@@ -46,24 +46,21 @@ void DrawPipe(Pipe *pipe, int screenHeight)
 }
 int CheckPipeCollision(Player *player, Pipe *pipe, int screenHeight)
 {
-    Rectangle playerRect =
-    {
+    Rectangle playerRect = {
         player->x,
         player->y,
         player->width,
         player->height
     };
 
-    Rectangle topPipeRect =
-    {
+    Rectangle topPipeRect = {
         pipe->x,
         0,
         pipe->width,
         pipe->gapY
     };
 
-    Rectangle bottomPipeRect =
-    {
+    Rectangle bottomPipeRect = {
         pipe->x,
         pipe->gapY + pipe->gapHeight,
         pipe->width,
@@ -76,9 +73,14 @@ int CheckPipeCollision(Player *player, Pipe *pipe, int screenHeight)
         return 1;
     }
 
+    // Ground collision
+    if (player->y + player->height >= screenHeight)
+    {
+        return 1;
+    }
+
     return 0;
 }
-
 int CheckPipeScore(Player *player, Pipe *pipe)
 {
     // Player has fully passed the pipe's right edge, and it hasn't been counted yet

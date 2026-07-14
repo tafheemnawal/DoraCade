@@ -18,6 +18,12 @@ void UpdatePlayer(Player *player, int screenWidth, int screenHeight, float dt)
     player->velocityY += gravity * dt;
 
     player->y += player->velocityY * dt;
+    // Don't let the player go above the screen
+    if (player->y < 0)
+    {
+        player->y = 0;
+        player->velocityY = 0;
+    }
 }
 
 void DrawPlayer(Player *player)

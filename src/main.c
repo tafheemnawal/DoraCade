@@ -38,6 +38,7 @@ int main()
                 gameState = 2;
             }
         }
+        
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
@@ -51,7 +52,7 @@ int main()
             DrawText("Press R to Restart", 430, 360, 25, DARKGRAY);
         }
 
-       if (IsKeyPressed(KEY_R) && gameState == 2)
+        if (IsKeyPressed(KEY_R) && gameState == 2)
         {
             InitPlayer(&player, screenWidth, screenHeight);
             InitPipe(&pipe, screenWidth);
