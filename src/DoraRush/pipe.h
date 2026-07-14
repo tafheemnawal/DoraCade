@@ -20,5 +20,6 @@ void UpdatePipe(Pipe *pipe,int screenWidth, float dt);
 void DrawPipe(Pipe *pipe, int screenHeight);
 
 int CheckPipeCollision(Player *player, Pipe *pipe, int screenHeight);
+int CheckPipeScore(Player *player, Pipe *pipe); 
 
 #endif

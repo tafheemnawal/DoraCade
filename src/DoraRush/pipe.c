@@ -78,3 +78,14 @@ int CheckPipeCollision(Player *player, Pipe *pipe, int screenHeight)
 
     return 0;
 }
+
+int CheckPipeScore(Player *player, Pipe *pipe)
+{
+    // Player has fully passed the pipe's right edge, and it hasn't been counted yet
+    if (pipe->scored == 0 && (pipe->x + pipe->width) < player->x)
+    {
+        pipe->scored = 1;
+        return 1;
+    }
+    return 0;
+}
