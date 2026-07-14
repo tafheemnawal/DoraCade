@@ -18,7 +18,7 @@ void UpdatePipe(Pipe *pipe,
                 int screenWidth,
                 float dt)
 {
-#define PIPE_SPEED 300.0f
+#define PIPE_SPEED 200.0f
 
     pipe->justRespawned = 0;
 
@@ -29,7 +29,7 @@ void UpdatePipe(Pipe *pipe,
     if (pipe->x + pipe->width < 0)
     {
         pipe->x = GetRightmostPipeX(pipes, pipeCount) + 350;
-        pipe->gapY = GetRandomValue(100, 540);
+        pipe->gapY = GetRandomValue(200, 400);
         pipe->scored = 0; 
         pipe->justRespawned = 1;
     }

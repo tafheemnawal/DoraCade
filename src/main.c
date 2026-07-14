@@ -94,8 +94,8 @@ int main()
 
         if (gameState == 2)
         {
-            DrawText("GAME OVER", 470, 300, 50, RED);
-            DrawText("Press R to Restart", 430, 360, 25, DARKGRAY);
+            DrawText("GAME OVER", 470, 300, 50, BLACK);
+            DrawText("Press R to Restart", 500, 360, 25, BLACK);
         }
 
         if (IsKeyPressed(KEY_R) && gameState == 2)
