@@ -78,8 +78,8 @@ int main()
 
         BeginDrawing();
 
-        ClearBackground(RAYWHITE);
-
+        DrawTexture(backgroundTexture, 0, 0, WHITE);
+        
         DrawPlayer(&player);
 
         for (int i = 0; i < PIPE_COUNT; i++)
