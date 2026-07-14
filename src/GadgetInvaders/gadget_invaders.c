@@ -55,8 +55,11 @@ Gadget CreateGadget()
 {
     Gadget gadget;
 
-    // Random gadget type
-    gadget.type = GetRandomValue(0, 4);
+
+    gadget.type = (GadgetType)GetRandomValue(
+    ANYWHERE_DOOR,
+    BIG_LIGHT
+);
 
     // Starting position
     gadget.position.x = GetRandomValue(50, 750);
@@ -74,6 +77,10 @@ Gadget CreateGadget()
 }
 void UpdateGadget(Gadget *gadget)
 {
+    if(gadget == NULL)
+        return;
+
+
     if(gadget->active)
     {
         gadget->position.y += gadget->speed;
