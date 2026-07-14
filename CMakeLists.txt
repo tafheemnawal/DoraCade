@@ -8,6 +8,7 @@ find_package(raylib REQUIRED)
 
 add_executable(DoraCade
     src/main.c
+    src/GadgetInvaders/gadget_invaders.c
     src/DoraRush/player.c
     src/DoraRush/pipe.c
 )
