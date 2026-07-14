@@ -17,6 +17,7 @@ int main()
     Coin coin;
 
     InitPlayer(&player, screenWidth, screenHeight);
+<<<<<<< HEAD
 
     for (int i = 0; i < PIPE_COUNT; i++)
     {
@@ -27,6 +28,11 @@ int main()
     // Coin follows the first pipe for now
     InitCoin(&coin, &pipe[0]);
 
+=======
+    InitPipe(&pipe, screenWidth);
+    InitCoin(&coin, &pipe);
+    LoadCoinTexture(&coin);
+>>>>>>> b925004318fa7b40b59143c90bdb594f792456ca
     SetTargetFPS(60);
 
     int gameState = 1;
@@ -108,11 +114,16 @@ int main()
         EndDrawing();
     }
 
+<<<<<<< HEAD
     for (int i = 0; i < PIPE_COUNT; i++)
     {
         UnloadTexture(pipe[i].texture);
     }
 
+=======
+    UnloadCoinTexture(&coin);
+    UnloadTexture(pipe.texture);
+>>>>>>> b925004318fa7b40b59143c90bdb594f792456ca
     CloseWindow();
 
     return 0;

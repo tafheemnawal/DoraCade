@@ -5,8 +5,18 @@ void InitCoin(Coin *coin, Pipe *pipe)
 {
     coin->x = pipe->x + pipe->width / 2;
     coin->y = pipe->gapY + pipe->gapHeight / 2;
-    coin->radius = 15;
+    coin->radius = 22;
     coin->collected = 0;
+}
+
+void LoadCoinTexture(Coin *coin)
+{
+    coin->texture = LoadTexture("../assets/textures/doracake.png");
+}
+
+void UnloadCoinTexture(Coin *coin)
+{
+    UnloadTexture(coin->texture);
 }
 
 void UpdateCoin(Coin *coin, Pipe *pipe)
@@ -25,7 +35,24 @@ void DrawCoin(Coin *coin)
 {
     if (!coin->collected)
     {
-        DrawCircle(coin->x, coin->y, coin->radius, YELLOW);
+        float displaySize = 45.0f;
+
+        Rectangle source = {
+            0, 0,
+            (float)coin->texture.width,
+            (float)coin->texture.height
+        };
+
+        Rectangle dest = {
+            coin->x,
+            coin->y,
+            displaySize,
+            displaySize
+        };
+
+        Vector2 origin = { displaySize / 2, displaySize / 2 };
+
+        DrawTexturePro(coin->texture, source, dest, origin, 0.0f, WHITE);
     }
 }
 
