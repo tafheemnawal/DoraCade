@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include "maze.h"
+#include "pacplayer.h"
 
 int main(void)
 {
@@ -9,12 +10,16 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "DoraMan Test");
     SetTargetFPS(60);
 
+    PacPlayer pac;
+    InitPacPlayer(&pac);
+
     while (!WindowShouldClose())
     {
         BeginDrawing();
         ClearBackground(BLACK);
 
         DrawMaze();
+        DrawPacPlayer(&pac);
 
         EndDrawing();
     }
