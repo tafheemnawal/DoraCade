@@ -12,6 +12,7 @@ add_executable(DoraCade
     src/DoraRush/player.c
     src/DoraRush/pipe.c
     src/DoraRush/coin.c
+    src/DoraRush/highscore.c
     src/Menu/menu.c
 )
 target_link_libraries(DoraCade PRIVATE raylib)

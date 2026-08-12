@@ -1,8 +1,10 @@
 #include <raylib.h>
+#include <string.h>
 
 #include "DoraRush/player.h"
 #include "DoraRush/pipe.h"
 #include "DoraRush/coin.h"
+#include "DoraRush/highscore.h"
 #include "Menu/menu.h"
 
 #define PIPE_COUNT 4
@@ -89,16 +91,8 @@ int main()
     );
 
     /*
-     * IMPORTANT:
-     * Raylib normally uses ESC to close the window.
-     *
-     * We disable that because ESC is now used for:
-     *
-     * GAME OVER
-     *      ↓
-     * ESC
-     *      ↓
-     * CLOSING SCENE
+     * ESC is controlled by our game states.
+     * It must NOT close the Raylib window.
      */
     SetExitKey(KEY_NULL);
 
@@ -192,6 +186,31 @@ int main()
 
 
     /* =====================================================
+       HIGH SCORES
+       ===================================================== */
+
+    HighScore highScores[MAX_SCORES];
+
+    /*
+     * Load saved scores from scores.txt
+     */
+    LoadHighScores(highScores);
+
+    /*
+     * Player name entered after Game Over
+     */
+    char playerName[NAME_LENGTH] = "";
+
+    int nameLength = 0;
+
+    /*
+     * Controls the different Game Over screens
+     */
+    bool enteringName = false;
+    bool showingHighScores = false;
+
+
+    /* =====================================================
        GAME STATE
        ===================================================== */
 
@@ -257,6 +276,15 @@ int main()
                      * Reset score
                      */
                     score = 0;
+
+                    /*
+                     * Reset high-score screen state
+                     */
+                    enteringName = false;
+                    showingHighScores = false;
+
+                    playerName[0] = '\0';
+                    nameLength = 0;
 
                     /*
                      * Start DoraRush
@@ -343,6 +371,15 @@ int main()
                         screenHeight))
                 {
                     gameState = STATE_GAMEOVER;
+
+                    /*
+                     * Start player-name entry
+                     */
+                    enteringName = true;
+                    showingHighScores = false;
+
+                    playerName[0] = '\0';
+                    nameLength = 0;
                 }
             }
 
@@ -381,36 +418,158 @@ int main()
 
         else if (gameState == STATE_GAMEOVER)
         {
-            /*
-             * Restart with R
-             */
-            if (IsKeyPressed(KEY_R))
+            /* =============================================
+               ENTER PLAYER NAME
+               ============================================= */
+
+            if (enteringName)
             {
-                ResetDoraRush(
-                    &player,
-                    pipe,
-                    coin,
-                    screenWidth,
-                    screenHeight
-                );
+                /*
+                 * Read typed characters
+                 */
+                int key = GetCharPressed();
 
-                score = 0;
+                while (key > 0)
+                {
+                    /*
+                     * Accept printable ASCII characters
+                     */
+                    if (key >= 32 &&
+                        key <= 125 &&
+                        nameLength < NAME_LENGTH - 1)
+                    {
+                        playerName[nameLength] =
+                            (char)key;
 
-                gameState = STATE_PLAYING;
+                        nameLength++;
+
+                        playerName[nameLength] =
+                            '\0';
+                    }
+
+                    key = GetCharPressed();
+                }
+
+
+                /*
+                 * Backspace
+                 */
+                if (IsKeyPressed(KEY_BACKSPACE) &&
+                    nameLength > 0)
+                {
+                    nameLength--;
+
+                    playerName[nameLength] =
+                        '\0';
+                }
+
+
+                /*
+                 * ENTER:
+                 *
+                 * Save score
+                 *      ↓
+                 * Show TOP 3
+                 */
+                if (IsKeyPressed(KEY_ENTER))
+                {
+                    /*
+                     * If the player entered nothing,
+                     * use "Player".
+                     */
+                    if (nameLength == 0)
+                    {
+                        strcpy(
+                            playerName,
+                            "Player"
+                        );
+                    }
+
+
+                    /*
+                     * Add score to Top 3
+                     */
+                    AddHighScore(
+                        highScores,
+                        playerName,
+                        score
+                    );
+
+
+                    /*
+                     * Move to Top 3 screen
+                     */
+                    enteringName = false;
+                    showingHighScores = true;
+                }
             }
 
 
-            /*
-             * ESC
-             *
-             * ESC no longer closes Raylib because
-             * SetExitKey(KEY_NULL) was used above.
-             */
-            if (IsKeyPressed(KEY_ESCAPE))
-            {
-                closingTimer = 0.0f;
+            /* =============================================
+               TOP 3 SCORES
+               ============================================= */
 
-                gameState = STATE_CLOSING;
+            else if (showingHighScores)
+            {
+                /*
+                 * ENTER hides the high-score screen.
+                 */
+                if (IsKeyPressed(KEY_ENTER))
+                {
+                    showingHighScores = false;
+                }
+            }
+
+
+            /* =============================================
+               NORMAL GAME OVER
+               ============================================= */
+
+            else
+            {
+                /*
+                 * Restart with R
+                 */
+                if (IsKeyPressed(KEY_R))
+                {
+                    ResetDoraRush(
+                        &player,
+                        pipe,
+                        coin,
+                        screenWidth,
+                        screenHeight
+                    );
+
+                    score = 0;
+
+                    enteringName = false;
+                    showingHighScores = false;
+
+                    playerName[0] = '\0';
+                    nameLength = 0;
+
+                    gameState = STATE_PLAYING;
+                }
+
+
+                /*
+                 * ESC
+                 *
+                 * ESC no longer closes Raylib because
+                 * SetExitKey(KEY_NULL) was used above.
+                 *
+                 * GAME OVER
+                 *      ↓
+                 * ESC
+                 *      ↓
+                 * CLOSING SCENE
+                 */
+                if (IsKeyPressed(KEY_ESCAPE))
+                {
+                    closingTimer = 0.0f;
+
+                    gameState = STATE_CLOSING;
+                }
             }
         }
 
@@ -562,29 +721,120 @@ int main()
 
             if (gameState == STATE_GAMEOVER)
             {
-                DrawText(
-                    "GAME OVER",
-                    470,
-                    280,
-                    50,
-                    RED
-                );
+                /*
+                 * =========================================
+                 * ENTER NAME
+                 * =========================================
+                 */
 
-                DrawText(
-                    "Press R to Restart",
-                    450,
-                    350,
-                    25,
-                    DARKGRAY
-                );
+                if (enteringName)
+                {
+                    DrawText(
+                        "GAME OVER",
+                        470,
+                        220,
+                        50,
+                        RED
+                    );
 
-                DrawText(
-                    "Press ESC for Main Menu",
-                    420,
-                    390,
-                    25,
-                    DARKGRAY
-                );
+                    DrawText(
+                        "Enter your name:",
+                        470,
+                        300,
+                        30,
+                        DARKGRAY
+                    );
+
+
+                    /*
+                     * Name input box
+                     */
+                    DrawRectangle(
+                        430,
+                        350,
+                        420,
+                        55,
+                        LIGHTGRAY
+                    );
+
+
+                    DrawText(
+                        playerName,
+                        450,
+                        365,
+                        30,
+                        BLACK
+                    );
+
+
+                    DrawText(
+                        "Press ENTER to save your score",
+                        390,
+                        440,
+                        25,
+                        DARKGRAY
+                    );
+                }
+
+
+                /*
+                 * =========================================
+                 * TOP 3 SCORES
+                 * =========================================
+                 */
+
+                else if (showingHighScores)
+                {
+                    DrawHighScores(
+                        highScores,
+                        screenWidth
+                    );
+
+
+                    DrawText(
+                        "Press ENTER to continue",
+                        430,
+                        380,
+                        25,
+                        DARKGRAY
+                    );
+                }
+
+
+                /*
+                 * =========================================
+                 * NORMAL GAME OVER
+                 * =========================================
+                 */
+
+                else
+                {
+                    DrawText(
+                        "GAME OVER",
+                        470,
+                        280,
+                        50,
+                        RED
+                    );
+
+
+                    DrawText(
+                        "Press R to Restart",
+                        450,
+                        350,
+                        25,
+                        DARKGRAY
+                    );
+
+
+                    DrawText(
+                        "Press ESC for Main Menu",
+                        420,
+                        390,
+                        25,
+                        DARKGRAY
+                    );
+                }
             }
 
 
@@ -659,6 +909,9 @@ int main()
     UnloadTexture(closingTexture);
 
 
+    /*
+     * KEEPING YOUR EXACT DORACAKE CLEANUP
+     */
     for (int i = 0; i < PIPE_COUNT; i++)
     {
         UnloadCoinTexture(&coin[i]);
