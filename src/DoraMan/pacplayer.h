@@ -10,6 +10,7 @@ typedef struct
 } PacPlayer;
 
 void InitPacPlayer(PacPlayer *pac);
+void UpdatePacPlayer(PacPlayer *pac);
 void DrawPacPlayer(PacPlayer *pac);
 
 #endif
