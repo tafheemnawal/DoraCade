@@ -15,6 +15,8 @@ int main(void)
 
     while (!WindowShouldClose())
     {
+        UpdatePacPlayer(&pac);
+
         BeginDrawing();
         ClearBackground(BLACK);
 
