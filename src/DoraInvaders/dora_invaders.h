@@ -1,5 +1,5 @@
-#ifndef GADGET_INVADERS_H
-#define GADGET_INVADERS_H
+#ifndef DORA_INVADERS_H
+#define DORA_INVADERS_H
 #include "raylib.h"
 
 //gadget type
@@ -25,20 +25,40 @@ typedef struct
     bool active;       // Is this gadget currently falling?
 
 } Gadget;
-// Create a new gadget
+
 Gadget CreateGadget();
 
 
-// Update falling movement
+
 void UpdateGadget(Gadget *gadget);
 
 
-// Draw gadget on screen
 void DrawGadget(Gadget gadget);
 
 
-// Reset gadget after missing/hitting
 void ResetGadget(Gadget *gadget);
- 
+typedef struct
+{
+    Rectangle bounds;  // x, y, width, height
+    float speed;       // Pixels per second
+
+} InvaderPlayer;
+
+
+// Player functions
+InvaderPlayer CreateInvaderPlayer(
+    int screenWidth,
+    int screenHeight
+);
+
+void UpdateInvaderPlayer(
+    InvaderPlayer *player,
+    int screenWidth,
+    float deltaTime
+);
+
+void DrawInvaderPlayer(
+    InvaderPlayer player
+);
 
 #endif

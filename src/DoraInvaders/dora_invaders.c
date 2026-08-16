@@ -1,4 +1,4 @@
-#include "gadget_invaders.h"
+#include "dora_invaders.h"
 #include <stdlib.h>
 #include <stddef.h>
 
@@ -111,4 +111,31 @@ void DrawGadget(Gadget gadget)
 void ResetGadget(Gadget *gadget)
 {
     *gadget = CreateGadget();
+}
+void UpdateInvaderPlayer(InvaderPlayer *player, int screenWidth, float deltaTime)
+{
+    if (player == NULL)
+        return;
+
+    if (IsKeyDown(KEY_LEFT))
+        player->bounds.x -= player->speed * deltaTime;
+
+    if (IsKeyDown(KEY_RIGHT))
+        player->bounds.x += player->speed * deltaTime;
+
+    // Clamp inside the screen
+    if (player->bounds.x < 0)
+        player->bounds.x = 0;
+
+    if (player->bounds.x + player->bounds.width > screenWidth)
+        player->bounds.x = screenWidth - player->bounds.width;
+}
+void DrawInvaderPlayer(
+    InvaderPlayer player
+)
+{
+    DrawRectangleRec(
+        player.bounds,
+        SKYBLUE
+    );
 }
