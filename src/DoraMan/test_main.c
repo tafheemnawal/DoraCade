@@ -15,7 +15,8 @@ int main(void)
 
     while (!WindowShouldClose())
     {
-        UpdatePacPlayer(&pac);
+        float dt = GetFrameTime();
+        UpdatePacPlayer(&pac, dt);
 
         BeginDrawing();
         ClearBackground(BLACK);
