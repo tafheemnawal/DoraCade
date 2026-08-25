@@ -17,5 +17,6 @@ typedef struct
 void InitGhost(Ghost *ghost, int startRow, int startCol);
 void UpdateGhost(Ghost *ghost, float dt);
 void DrawGhost(Ghost *ghost);
+int CheckGhostCollision(Ghost *ghost, float playerX, float playerY);
 
 #endif

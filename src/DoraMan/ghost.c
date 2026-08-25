@@ -1,6 +1,7 @@
 #include "ghost.h"
 #include "maze.h"
 #include <raylib.h>
+#include <math.h>
 
 void InitGhost(Ghost *ghost, int startRow, int startCol)
 {
@@ -116,4 +117,13 @@ void DrawGhost(Ghost *ghost)
     float centerX = ghost->x + TILE_SIZE / 2;
     float centerY = ghost->y + TILE_SIZE / 2;
     DrawCircle(centerX, centerY, TILE_SIZE / 2 - 6, RED);
+}
+
+int CheckGhostCollision(Ghost *ghost, float playerX, float playerY)
+{
+    float dx = ghost->x - playerX;
+    float dy = ghost->y - playerY;
+    float distance = sqrtf(dx * dx + dy * dy);
+
+    return distance < TILE_SIZE / 2;
 }
