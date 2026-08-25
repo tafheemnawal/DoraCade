@@ -15,6 +15,7 @@ typedef struct
 } Ghost;
 
 void InitGhost(Ghost *ghost, int startRow, int startCol);
+void UpdateGhost(Ghost *ghost, float dt);
 void DrawGhost(Ghost *ghost);
 
 #endif

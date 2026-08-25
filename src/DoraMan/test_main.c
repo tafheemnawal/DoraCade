@@ -25,6 +25,7 @@ int main(void)
     {
         float dt = GetFrameTime();
         UpdatePacPlayer(&pac, dt);
+        UpdateGhost(&ghost, dt);
 
         if (CollectPellet(pac.row, pac.col))
         {
