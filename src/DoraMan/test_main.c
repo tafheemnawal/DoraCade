@@ -2,6 +2,7 @@
 #include "maze.h"
 #include "pacplayer.h"
 #include "pellet.h"
+#include "ghost.h"
 
 int main(void)
 {
@@ -14,6 +15,9 @@ int main(void)
     PacPlayer pac;
     InitPacPlayer(&pac);
     InitPellets(pac.row, pac.col);
+
+    Ghost ghost;
+    InitGhost(&ghost, MAZE_ROWS - 2, MAZE_COLS - 2);
 
     int score = 0;
 
@@ -33,6 +37,7 @@ int main(void)
         DrawMaze();
         DrawPellets();
         DrawPacPlayer(&pac);
+        DrawGhost(&ghost);
 
         DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
 
