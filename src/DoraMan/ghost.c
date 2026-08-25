@@ -27,6 +27,10 @@ void PickRandomDirection(Ghost *ghost)
         {0, 1}
     };
 
+    // The direction that would take the ghost back where it just came from
+    int reverseRow = -ghost->dirRow;
+    int reverseCol = -ghost->dirCol;
+
     int validCount = 0;
     int validDirs[4][2];
 
@@ -34,6 +38,12 @@ void PickRandomDirection(Ghost *ghost)
     {
         int checkRow = ghost->row + options[i][0];
         int checkCol = ghost->col + options[i][1];
+
+        // Skip the reverse direction (don't turn back)
+        if (options[i][0] == reverseRow && options[i][1] == reverseCol)
+        {
+            continue;
+        }
 
         if (!IsWall(checkRow, checkCol))
         {
@@ -43,12 +53,17 @@ void PickRandomDirection(Ghost *ghost)
         }
     }
 
-    if (validCount > 0)
+    // If every other direction is blocked (dead end), allow reversing
+    if (validCount == 0)
     {
-        int choice = GetRandomValue(0, validCount - 1);
-        ghost->dirRow = validDirs[choice][0];
-        ghost->dirCol = validDirs[choice][1];
+        ghost->dirRow = reverseRow;
+        ghost->dirCol = reverseCol;
+        return;
     }
+
+    int choice = GetRandomValue(0, validCount - 1);
+    ghost->dirRow = validDirs[choice][0];
+    ghost->dirCol = validDirs[choice][1];
 }
 
 void UpdateGhost(Ghost *ghost, float dt)
