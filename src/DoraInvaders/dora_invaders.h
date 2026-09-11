@@ -45,6 +45,18 @@ typedef struct
 } InvaderPlayer;
 
 
+// Main Dora Invaders game data
+typedef struct
+{
+    InvaderPlayer player;
+
+    Gadget gadgets[5];
+
+    int score;
+
+} DoraInvadersGame;
+
+
 // Player functions
 InvaderPlayer CreateInvaderPlayer(
     int screenWidth,
@@ -59,6 +71,12 @@ void UpdateInvaderPlayer(
 
 void DrawInvaderPlayer(
     InvaderPlayer player
+);
+// Initialize the complete Dora Invaders game
+void InitDoraInvaders(
+    DoraInvadersGame *game,
+    int screenWidth,
+    int screenHeight
 );
 
 #endif

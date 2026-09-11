@@ -139,3 +139,57 @@ void DrawInvaderPlayer(
         SKYBLUE
     );
 }
+// Create player at bottom-center of screen
+InvaderPlayer CreateInvaderPlayer(
+    int screenWidth,
+    int screenHeight
+)
+{
+    InvaderPlayer player;
+
+    // Player size
+    player.bounds.width = 60;
+    player.bounds.height = 30;
+
+    // Start position
+    player.bounds.x =
+        (screenWidth - player.bounds.width) / 2;
+
+    player.bounds.y =
+        screenHeight - player.bounds.height - 20;
+
+    // Movement speed
+    player.speed = 300;
+
+    return player;
+}
+// Initialize Dora Invaders game
+void InitDoraInvaders(
+    DoraInvadersGame *game,
+    int screenWidth,
+    int screenHeight
+)
+{
+    if(game == NULL)
+        return;
+
+
+    // Create player
+    game->player =
+        CreateInvaderPlayer(
+            screenWidth,
+            screenHeight
+        );
+
+
+    // Create gadgets
+    for(int i = 0; i < 5; i++)
+    {
+        game->gadgets[i] =
+            CreateGadget();
+    }
+
+
+    // Reset score
+    game->score = 0;
+}
