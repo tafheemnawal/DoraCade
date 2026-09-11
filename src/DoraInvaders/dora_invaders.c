@@ -68,7 +68,7 @@ Gadget CreateGadget()
     gadget.position.y = -50;
 
     // Falling speed
-    gadget.speed = GetRandomValue(5, 10);
+   gadget.speed = GetRandomValue(100, 200);
 
     // Points based on type
     gadget.points = GetGadgetPoints(gadget.type);
@@ -110,6 +110,9 @@ void DrawGadget(Gadget gadget)
 }
 void ResetGadget(Gadget *gadget)
 {
+    if(gadget == NULL)
+        return;
+
     *gadget = CreateGadget();
 }
 void UpdateInvaderPlayer(InvaderPlayer *player, int screenWidth, float deltaTime)
@@ -192,4 +195,50 @@ void InitDoraInvaders(
 
     // Reset score
     game->score = 0;
+}
+// Update complete Dora Invaders game
+void UpdateDoraInvaders(
+    DoraInvadersGame *game,
+    int screenWidth,
+    float deltaTime
+)
+{
+    if(game == NULL)
+        return;
+
+
+    // Update player
+    UpdateInvaderPlayer(
+        &game->player,
+        screenWidth,
+        deltaTime
+    );
+
+
+    // Update gadgets
+    for(int i = 0; i < 5; i++)
+    {
+        UpdateGadget(
+            &game->gadgets[i]
+        );
+    }
+}
+// Draw complete Dora Invaders game
+void DrawDoraInvaders(
+    DoraInvadersGame game
+)
+{
+    // Draw player
+    DrawInvaderPlayer(
+        game.player
+    );
+
+
+    // Draw gadgets
+    for(int i = 0; i < 5; i++)
+    {
+        DrawGadget(
+            game.gadgets[i]
+        );
+    }
 }

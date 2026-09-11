@@ -78,5 +78,10 @@ void InitDoraInvaders(
     int screenWidth,
     int screenHeight
 );
-
+// Update complete Dora Invaders game
+void UpdateDoraInvaders(
+    DoraInvadersGame *game,
+    int screenWidth,
+    float deltaTime
+);
 #endif
