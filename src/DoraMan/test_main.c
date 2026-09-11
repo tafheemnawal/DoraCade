@@ -10,6 +10,9 @@ int main(void)
     const int screenHeight = MAZE_ROWS * TILE_SIZE;
 
     InitWindow(screenWidth, screenHeight, "DoraMan Test");
+
+    Texture2D backgroundTexture = LoadTexture("../assets/textures/doraman_background.png");
+
     SetTargetFPS(60);
 
     PacPlayer pac;
@@ -54,6 +57,15 @@ int main(void)
         BeginDrawing();
         ClearBackground(BLACK);
 
+        DrawTexturePro(
+            backgroundTexture,
+            (Rectangle){ 0, 0, (float)backgroundTexture.width, (float)backgroundTexture.height },
+            (Rectangle){ 0, 0, (float)screenWidth, (float)screenHeight },
+            (Vector2){ 0, 0 },
+            0.0f,
+            WHITE
+        );
+
         DrawMaze();
         DrawPellets();
         DrawPacPlayer(&pac);
@@ -70,6 +82,7 @@ int main(void)
         EndDrawing();
     }
 
+    UnloadTexture(backgroundTexture);
     CloseWindow();
     return 0;
 }
