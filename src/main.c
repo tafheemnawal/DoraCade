@@ -7,17 +7,21 @@
 #include "DoraRush/highscore.h"
 #include "Menu/menu.h"
 
+#include "DoraInvaders/dora_invaders.h"
+
 #define PIPE_COUNT 4
 #define CLOSING_TIME 3.0f
+
 
 typedef enum
 {
     STATE_MENU,
-    STATE_PLAYING,
+    STATE_DORARUSH,
+    STATE_DORAMAN,
+    STATE_DORA_INVADERS,
     STATE_GAMEOVER,
     STATE_CLOSING
 } GameState;
-
 
 /* =========================================================
    RESET DORARUSH
@@ -289,7 +293,7 @@ int main()
                     /*
                      * Start DoraRush
                      */
-                    gameState = STATE_PLAYING;
+                    gameState = STATE_DORARUSH;
                 }
 
 
@@ -306,13 +310,13 @@ int main()
 
 
                 /* =========================================
-                   GADGET INVADERS
+                   DORA INVADERS
                    ========================================= */
 
                 else if (selectedGame == 2)
                 {
                     /*
-                     * Gadget Invaders will be connected here later.
+                     * Dora Invaders will be connected here later.
                      */
                 }
             }
@@ -323,7 +327,7 @@ int main()
            DORARUSH
            ================================================= */
 
-        else if (gameState == STATE_PLAYING)
+        else if (gameState == STATE_DORARUSH)
         {
             /*
              * Update player
@@ -548,7 +552,7 @@ int main()
                     playerName[0] = '\0';
                     nameLength = 0;
 
-                    gameState = STATE_PLAYING;
+                    gameState = STATE_DORARUSH;
                 }
 
 
@@ -633,7 +637,7 @@ int main()
            DORARUSH DRAWING
            ================================================= */
 
-        else if (gameState == STATE_PLAYING ||
+        else if (gameState == STATE_DORARUSH ||
                  gameState == STATE_GAMEOVER)
         {
             /*
@@ -928,3 +932,6 @@ int main()
 
     return 0;
 }
+
+
+
