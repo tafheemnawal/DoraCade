@@ -30,19 +30,36 @@ Gadget CreateGadget();
 
 
 
-void UpdateGadget(Gadget *gadget);
+void UpdateGadget(
+    Gadget *gadget,
+    float deltaTime
+);
 
 
 void DrawGadget(Gadget gadget);
 
 
 void ResetGadget(Gadget *gadget);
+
+
 typedef struct
 {
     Rectangle bounds;  // x, y, width, height
     float speed;       // Pixels per second
 
 } InvaderPlayer;
+
+// Bullet fired by player
+typedef struct
+{
+    Vector2 position;
+
+    float speed;
+
+    bool active;
+
+} InvaderBullet;
+
 
 
 // Main Dora Invaders game data
@@ -55,6 +72,7 @@ typedef struct
     int score;
 
 } DoraInvadersGame;
+
 
 
 // Player functions
@@ -84,4 +102,9 @@ void UpdateDoraInvaders(
     int screenWidth,
     float deltaTime
 );
+// Draw complete Dora Invaders game
+void DrawDoraInvaders(
+    DoraInvadersGame game
+);
+
 #endif
