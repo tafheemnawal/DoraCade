@@ -7,6 +7,12 @@
 #include "DoraRush/highscore.h"
 #include "Menu/menu.h"
 
+#include "DoraMan/maze.h"          
+#include "DoraMan/pacplayer.h"     
+#include "DoraMan/pellet.h"         
+#include "DoraMan/ghost.h"         
+#include "DoraMan/doraman_highscore.h"   
+
 #define PIPE_COUNT 4
 #define CLOSING_TIME 3.0f
 
@@ -15,7 +21,9 @@ typedef enum
     STATE_MENU,
     STATE_PLAYING,
     STATE_GAMEOVER,
-    STATE_CLOSING
+    STATE_CLOSING,
+    STATE_DORAMAN,           
+    STATE_DORAMAN_GAMEOVER   
 } GameState;
 
 
