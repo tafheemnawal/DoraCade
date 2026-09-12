@@ -216,6 +216,26 @@ int main()
      */
     bool enteringName = false;
     bool showingHighScores = false;
+    
+
+    /* =====================================================
+       DORAMAN OBJECTS
+       ===================================================== */
+
+    PacPlayer pac;
+    Ghost ghost;
+
+    Texture2D doramanBackgroundTexture = LoadTexture("assets/textures/doraman_background.png");
+
+    DoraManHighScore doramanHighScores[MAX_DORAMAN_SCORES];
+    LoadDoraManHighScores(doramanHighScores);
+
+    char doramanPlayerName[DORAMAN_NAME_LENGTH] = "";
+    int doramanNameLength = 0;
+    int doramanEnteringName = 0;
+    int doramanShowingHighScores = 0;
+
+    int doramanScore = 0;
 
 
     /* =====================================================
