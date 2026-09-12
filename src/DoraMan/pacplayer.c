@@ -74,7 +74,19 @@ void UpdatePacPlayer(PacPlayer *pac, float dt) {
 
 void DrawPacPlayer(PacPlayer *pac)
 {
-    float centerX = pac->x + TILE_SIZE / 2;
-    float centerY = pac->y + TILE_SIZE / 2;
-    DrawCircle(centerX, centerY, TILE_SIZE / 2 - 6, YELLOW);
+    float tileCenterX = (int)(pac->x + TILE_SIZE / 2.0f);
+    float tileCenterY = (int)(pac->y + TILE_SIZE / 2.0f);
+
+    float desiredSize = TILE_SIZE * 1.2f;
+    float halfDesired = desiredSize / 2.0f;
+
+    float sourceX = 0.0f;
+    float sourceWidth = (float)pac->texture.width;
+    float sourceHeight = (float)pac->texture.height;
+
+    Rectangle source = { sourceX, 0.0f, sourceWidth, sourceHeight };
+    Rectangle dest = { tileCenterX, tileCenterY, desiredSize, desiredSize };
+    Vector2 origin = { halfDesired, halfDesired };
+
+    DrawTexturePro(pac->texture, source, dest, origin, 0.0f, WHITE);
 }
