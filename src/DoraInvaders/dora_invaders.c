@@ -146,6 +146,34 @@ void DrawInvaderPlayer(
         SKYBLUE
     );
 }
+
+// Bullet fired by player
+void FireInvaderBullet(
+    InvaderBullet *bullet,
+    InvaderPlayer player
+)
+{
+    if(bullet == NULL)
+        return;
+
+
+    // Fire only if no bullet exists
+    if(!bullet->active)
+    {
+        bullet->position.x =
+            player.bounds.x +
+            player.bounds.width / 2;
+
+        bullet->position.y =
+            player.bounds.y;
+
+
+        bullet->speed = 500;
+
+        bullet->active = true;
+    }
+}
+
 // Create player at bottom-center of screen
 InvaderPlayer CreateInvaderPlayer(
     int screenWidth,
@@ -234,6 +262,8 @@ void UpdateDoraInvaders(
     }
 }
 }
+
+
 // Draw complete Dora Invaders game
 void DrawDoraInvaders(
     DoraInvadersGame game
@@ -243,6 +273,8 @@ void DrawDoraInvaders(
     DrawInvaderPlayer(
         game.player
     );
+
+
 
 
     // Draw gadgets

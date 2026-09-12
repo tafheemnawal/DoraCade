@@ -63,9 +63,12 @@ typedef struct
 
 
 // Main Dora Invaders game data
+// Main Dora Invaders game data
 typedef struct
 {
     InvaderPlayer player;
+
+    InvaderBullet bullet;
 
     Gadget gadgets[5];
 
@@ -90,6 +93,13 @@ void UpdateInvaderPlayer(
 void DrawInvaderPlayer(
     InvaderPlayer player
 );
+
+// Bullet functions
+void FireInvaderBullet(
+    InvaderBullet *bullet,
+    InvaderPlayer player
+);
+
 // Initialize the complete Dora Invaders game
 void InitDoraInvaders(
     DoraInvadersGame *game,
