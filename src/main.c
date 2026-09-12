@@ -629,6 +629,105 @@ int main()
 
 
         /* =================================================
+            DORAMAN
+           ================================================= */
+
+        else if (gameState == STATE_DORAMAN)
+        {
+            UpdatePacPlayer(&pac, dt);
+            UpdateGhost(&ghost, dt);
+
+            if (CollectPellet(pac.row, pac.col))
+            {
+                doramanScore += 10;
+            }
+
+            if (AllPelletsCollected())
+            {
+                ResetDoraMan(&pac, &ghost, MAZE_ROWS - 2, MAZE_COLS - 2);
+            }
+
+            if (CheckGhostCollision(&ghost, pac.x, pac.y))
+            {
+                gameState = STATE_DORAMAN_GAMEOVER;
+                doramanEnteringName = 1;
+                doramanPlayerName[0] = '\0';
+                doramanNameLength = 0;
+            }
+
+            if (IsKeyPressed(KEY_ESCAPE))
+            {
+                UnloadPacPlayerTexture(&pac);
+                UnloadGhostTexture(&ghost);
+                closingTimer = 0.0f;
+                gameState = STATE_CLOSING;
+            }
+        }
+
+
+        /* =================================================
+            DORAMAN GAME OVER
+           ================================================= */
+
+        else if (gameState == STATE_DORAMAN_GAMEOVER)
+        {
+            if (doramanEnteringName)
+            {
+                int key = GetCharPressed();
+                while (key > 0)
+                {
+                    if (key >= 32 && key <= 125 && doramanNameLength < DORAMAN_NAME_LENGTH - 1)
+                    {
+                        doramanPlayerName[doramanNameLength] = (char)key;
+                        doramanNameLength++;
+                        doramanPlayerName[doramanNameLength] = '\0';
+                    }
+                    key = GetCharPressed();
+                }
+
+                if (IsKeyPressed(KEY_BACKSPACE) && doramanNameLength > 0)
+                {
+                    doramanNameLength--;
+                    doramanPlayerName[doramanNameLength] = '\0';
+                }
+
+                if (IsKeyPressed(KEY_ENTER))
+                {
+                    if (doramanNameLength == 0)
+                    {
+                        strcpy(doramanPlayerName, "Player");
+                    }
+
+                    AddDoraManHighScore(doramanHighScores, doramanPlayerName, doramanScore);
+
+                    doramanEnteringName = 0;
+                    doramanShowingHighScores = 1;
+                }
+            }
+            else if (doramanShowingHighScores)
+            {
+                if (IsKeyPressed(KEY_R))
+                {
+                    ResetDoraMan(&pac, &ghost, MAZE_ROWS - 2, MAZE_COLS - 2);
+                    LoadPacPlayerTexture(&pac);
+                    LoadGhostTexture(&ghost);
+                    doramanScore = 0;
+                    doramanShowingHighScores = 0;
+                    gameState = STATE_DORAMAN;
+                }
+            }
+
+            if (IsKeyPressed(KEY_ESCAPE))
+            {
+                UnloadPacPlayerTexture(&pac);
+                UnloadGhostTexture(&ghost);
+                closingTimer = 0.0f;
+                gameState = STATE_CLOSING;
+            }
+        }
+
+
+        /* =================================================
            CLOSING SCENE
            ================================================= */
 
