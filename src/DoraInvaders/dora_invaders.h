@@ -119,4 +119,6 @@ void DrawDoraInvaders(
     DoraInvadersGame game
 );
 
+void LoadDoraInvadersTextures();
+
 #endif

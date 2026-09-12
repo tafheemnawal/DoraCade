@@ -124,7 +124,8 @@ int main()
     Texture2D invaderBackgroundTexture =
     LoadTexture(
         "../assets/textures/dora_invaders/background.png");
-
+     
+        LoadDoraInvadersTextures();
 
     /* =====================================================
        DORARUSH OBJECTS

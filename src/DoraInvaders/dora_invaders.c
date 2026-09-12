@@ -1,6 +1,33 @@
 #include "dora_invaders.h"
 #include <stdlib.h>
 #include <stddef.h>
+static Texture2D doracakeTexture;
+static Texture2D bambooCopterTexture;
+static Texture2D timeMachineTexture;
+static Texture2D smallLightTexture;
+static Texture2D bigLightTexture;
+void LoadDoraInvadersTextures()
+{
+    doracakeTexture = LoadTexture(
+        "../assets/textures/dora_invaders/doracake.png"
+    );
+
+    bambooCopterTexture = LoadTexture(
+        "../assets/textures/dora_invaders/bamboo_copter.png"
+    );
+
+    timeMachineTexture = LoadTexture(
+        "../assets/textures/dora_invaders/time_machine.png"
+    );
+
+    smallLightTexture = LoadTexture(
+        "../assets/textures/dora_invaders/small_light.png"
+    );
+
+    bigLightTexture = LoadTexture(
+        "../assets/textures/dora_invaders/big_light.png"
+    );
+}
 
 static int GetGadgetPoints(GadgetType type)
 {
@@ -97,15 +124,62 @@ void UpdateGadget(
 
 void DrawGadget(Gadget gadget)
 {
-    if(gadget.active)
+    if(!gadget.active)
+        return;
+
+    Texture2D currentTexture;
+
+    switch(gadget.type)
     {
-       DrawCircle(
-    gadget.position.x,
-    gadget.position.y,
-    20,
-    GetGadgetColor(gadget.type)
-);
+        case DORACAKE:
+            currentTexture = doracakeTexture;
+            break;
+
+        case BAMBOO_COPTER:
+            currentTexture = bambooCopterTexture;
+            break;
+
+        case TIME_MACHINE:
+            currentTexture = timeMachineTexture;
+            break;
+
+        case SMALL_LIGHT:
+            currentTexture = smallLightTexture;
+            break;
+
+        case BIG_LIGHT:
+            currentTexture = bigLightTexture;
+            break;
+
+        default:
+            currentTexture = doracakeTexture;
+            break;
     }
+
+    Rectangle source =
+    {
+        0,
+        0,
+        (float)currentTexture.width,
+        (float)currentTexture.height
+    };
+
+    Rectangle destination =
+    {
+        gadget.position.x,
+        gadget.position.y,
+        50,
+        50
+    };
+
+    DrawTexturePro(
+        currentTexture,
+        source,
+        destination,
+        (Vector2){25, 25},
+        0.0f,
+        WHITE
+    );
 }
 
 void ResetGadget(Gadget *gadget)
@@ -242,8 +316,19 @@ void UpdateDoraInvaders(
     if(game == NULL)
         return;
 
-    if(game->gameOver)
+   if(game->gameOver)
+{
+    if(IsKeyPressed(KEY_ENTER))
+    {
+        InitDoraInvaders(
+            game,
+            screenWidth,
+            GetScreenHeight()
+        );
+    }
+
     return;
+}
 
 
     // Update player
@@ -383,15 +468,38 @@ DrawText(
     WHITE
 );
 
+DrawText(
+    TextFormat("Lives: %d", 5 - game.misses),
+    20,
+    60,
+    30,
+    WHITE
+);
 
 if(game.gameOver)
 {
     DrawText(
         "GAME OVER",
         250,
-        250,
-        40,
+        220,
+        50,
         RED
+    );
+
+    DrawText(
+        TextFormat("Final Score: %d", game.score),
+        250,
+        280,
+        30,
+        WHITE
+    );
+
+    DrawText(
+        "Press ENTER to Restart",
+        220,
+        340,
+        30,
+        YELLOW
     );
 }
 }
