@@ -41,6 +41,14 @@ int main(void)
                 score += 10;
             }
 
+            if (AllPelletsCollected())
+            {
+                InitPacPlayer(&pac);
+                InitPellets(pac.row, pac.col);
+                InitGhost(&ghost, MAZE_ROWS - 2, MAZE_COLS - 2);
+                // score is NOT reset here — it carries over
+            }
+
             if (CheckGhostCollision(&ghost, pac.x, pac.y))
             {
                 gameOver = 1;
