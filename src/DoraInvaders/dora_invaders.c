@@ -64,7 +64,7 @@ Gadget CreateGadget()
 );
 
     // Starting position
-    gadget.position.x = GetRandomValue(50, 750);
+    gadget.position.x = GetRandomValue(80, GetScreenWidth() - 80);
     gadget.position.y = -50;
 
     // Falling speed
@@ -77,6 +77,7 @@ Gadget CreateGadget()
 
     return gadget;
 }
+
 void UpdateGadget(
     Gadget *gadget,
     float deltaTime
@@ -90,15 +91,9 @@ void UpdateGadget(
     {
         // Move gadget downward using time-based movement
         gadget->position.y += gadget->speed * deltaTime;
-
-
-        // If gadget reaches bottom of screen
-        if(gadget->position.y > GetScreenHeight())
-        {
-            gadget->active = false;
-        }
     }
 }
+
 
 void DrawGadget(Gadget gadget)
 {
@@ -112,6 +107,7 @@ void DrawGadget(Gadget gadget)
 );
     }
 }
+
 void ResetGadget(Gadget *gadget)
 {
     if(gadget == NULL)
@@ -218,15 +214,23 @@ void InitDoraInvaders(
 
 
     // Create gadgets
-    for(int i = 0; i < 5; i++)
-    {
-        game->gadgets[i] =
-            CreateGadget();
-    }
+   for(int i = 0; i < 5; i++)
+{
+    game->gadgets[i] = CreateGadget();
+
+    game->gadgets[i].position.x =
+    GetRandomValue(80, screenWidth - 80);
+
+    game->gadgets[i].position.y =
+        -100 - (i * 120);
+}
 
 
     // Reset score
     game->score = 0;
+    game->misses = 0;
+    game->gameOver = false;
+    game->bullet.active = false;
 }
 // Update complete Dora Invaders game
 void UpdateDoraInvaders(
@@ -237,6 +241,9 @@ void UpdateDoraInvaders(
 {
     if(game == NULL)
         return;
+
+    if(game->gameOver)
+    return;
 
 
     // Update player
@@ -298,34 +305,43 @@ if(game->bullet.active)
                 bulletRect,
                 gadgetRect))
             {
-                game->gadgets[i].active = false;
+             game->score += game->gadgets[i].points;
 
-                game->score +=
-                    game->gadgets[i].points;
+            game->bullet.active = false;
 
-                game->bullet.active = false;
+            ResetGadget(
+                    &game->gadgets[i]
+                );
             }
         }
     }
 }
 
-
-    // Update gadgets
-   for(int i = 0; i < 5; i++)
+// Update gadgets
+for(int i = 0; i < 5; i++)
 {
     UpdateGadget(
         &game->gadgets[i],
         deltaTime
     );
-      if(!game->gadgets[i].active)
+
+
+    // Gadget reached bottom (missed)
+    if(game->gadgets[i].position.y > GetScreenHeight())
     {
+        game->misses++;
+
+        if(game->misses >= 3)
+        {
+            game->gameOver = true;
+        }
+
         ResetGadget(
             &game->gadgets[i]
         );
     }
 }
 }
-
 
 // Draw complete Dora Invaders game
 void DrawDoraInvaders(
@@ -367,4 +383,16 @@ DrawText(
     WHITE
 );
 
+
+if(game.gameOver)
+{
+    DrawText(
+        "GAME OVER",
+        250,
+        250,
+        40,
+        RED
+    );
 }
+}
+

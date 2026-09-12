@@ -74,9 +74,11 @@ typedef struct
 
     int score;
 
+    int misses;
+
+    bool gameOver;
+
 } DoraInvadersGame;
-
-
 
 // Player functions
 InvaderPlayer CreateInvaderPlayer(
