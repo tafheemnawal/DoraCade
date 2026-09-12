@@ -124,9 +124,24 @@ void UpdateGhost(Ghost *ghost, float dt)
 
 void DrawGhost(Ghost *ghost)
 {
-    float centerX = ghost->x + TILE_SIZE / 2;
-    float centerY = ghost->y + TILE_SIZE / 2;
-    DrawCircle(centerX, centerY, TILE_SIZE / 2 - 6, RED);
+    float displaySize = TILE_SIZE - 4;
+
+    Rectangle source = {
+        0, 0,
+        (float)ghost->texture.width,
+        (float)ghost->texture.height
+    };
+
+    Rectangle dest = {
+        ghost->x + TILE_SIZE / 2,
+        ghost->y + TILE_SIZE / 2,
+        displaySize,
+        displaySize
+    };
+
+    Vector2 origin = { displaySize / 2, displaySize / 2 };
+
+    DrawTexturePro(ghost->texture, source, dest, origin, 0.0f, WHITE);
 }
 
 int CheckGhostCollision(Ghost *ghost, float playerX, float playerY)
