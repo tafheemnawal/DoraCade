@@ -16,6 +16,8 @@ static int maze[MAZE_ROWS][MAZE_COLS] = {
     {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
+static const Color NAVY_BLUE = { 10, 10, 60, 255 };
+
 void DrawMaze(void)
 {
     for (int row = 0; row < MAZE_ROWS; row++)
@@ -24,7 +26,7 @@ void DrawMaze(void)
         {
             if (maze[row][col] == 1)
             {
-                DrawRectangle(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE, DARKBLUE);
+                DrawRectangle(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE, NAVY_BLUE);
             }
         }
     }
