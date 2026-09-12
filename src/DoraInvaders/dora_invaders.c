@@ -246,6 +246,29 @@ void UpdateDoraInvaders(
         deltaTime
     );
 
+    // Fire bullet
+if(IsKeyPressed(KEY_SPACE))
+{
+    FireInvaderBullet(
+        &game->bullet,
+        game->player
+    );
+}
+
+// Update bullet
+if(game->bullet.active)
+{
+    game->bullet.position.y -=
+        game->bullet.speed * deltaTime;
+
+
+    // Remove bullet when it leaves screen
+    if(game->bullet.position.y < 0)
+    {
+        game->bullet.active = false;
+    }
+}
+
 
     // Update gadgets
    for(int i = 0; i < 5; i++)
@@ -274,7 +297,17 @@ void DrawDoraInvaders(
         game.player
     );
 
-
+// Draw bullet
+if(game.bullet.active)
+{
+    DrawRectangle(
+        game.bullet.position.x - 3,
+        game.bullet.position.y,
+        6,
+        15,
+        WHITE
+    );
+}
 
 
     // Draw gadgets
