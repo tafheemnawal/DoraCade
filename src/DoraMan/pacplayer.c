@@ -14,7 +14,7 @@ void InitPacPlayer(PacPlayer *pac) {
     pac->dirRow = 0;
     pac->dirCol = 0;
     
-    pac->speed = 200.0f;
+    pac->speed = 180.0f;
     pac->rotation = 0.0f;   
 }
 

@@ -1056,6 +1056,7 @@ int main()
                 {
                     DrawDoraManHighScores(doramanHighScores, doramanWidth);
                     DrawText("Press R to restart", doramanWidth / 2 - 100, doramanHeight / 2 + 60, 20, WHITE);
+                    DrawText("Press ESC for Main Menu", doramanWidth / 2 - 130, doramanHeight / 2 + 90, 20, WHITE);
                 }
             }
         }

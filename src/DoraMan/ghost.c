@@ -16,7 +16,7 @@ void InitGhost(Ghost *ghost, int startRow, int startCol)
     ghost->dirRow = 0;
     ghost->dirCol = 0;
 
-    ghost->speed = 120.0f;
+    ghost->speed = 180.0f;
 }
 
 void LoadGhostTexture(Ghost *ghost)
