@@ -4,5 +4,6 @@
 void InitPellets(int startRow, int startCol);
 void DrawPellets(void);
 int CollectPellet(int row, int col);
+int AllPelletsCollected(void);
 
 #endif

@@ -51,3 +51,18 @@ int CollectPellet(int row, int col)
     }
     return 0;
 }
+
+int AllPelletsCollected(void)
+{
+    for (int row = 0; row < MAZE_ROWS; row++)
+    {
+        for (int col = 0; col < MAZE_COLS; col++)
+        {
+            if (pellets[row][col] == 1)
+            {
+                return 0;   // found a pellet still remaining
+            }
+        }
+    }
+    return 1;   // no pellets left
+}
