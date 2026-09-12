@@ -5,7 +5,7 @@
 //gadget type
 typedef enum
 {
-    ANYWHERE_DOOR,
+    DORACAKE,
     BAMBOO_COPTER,
     TIME_MACHINE,
     SMALL_LIGHT,

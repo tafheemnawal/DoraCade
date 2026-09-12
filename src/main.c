@@ -118,7 +118,13 @@ int main()
      */
     Texture2D closingTexture =
         LoadTexture(
-            "../assets/textures/doracade_closing.png");
+            "../assets/textures/doracade_closing.png"
+        );
+
+    Texture2D invaderBackgroundTexture =
+    LoadTexture(
+        "../assets/textures/dora_invaders/background.png");
+
 
     /* =====================================================
        DORARUSH OBJECTS
@@ -161,15 +167,7 @@ int main()
         screenWidth,
         screenHeight);
 
-    /*
-     * IMPORTANT:
-     *
-     * ResetDoraRush only initializes the DoraCakes.
-     *
-     * We still need to load their textures.
-     *
-     * This is your original system.
-     */
+    
     for (int i = 0; i < PIPE_COUNT; i++)
     {
         LoadCoinTexture(&coin[i]);
@@ -785,14 +783,43 @@ int main()
         /* =================================================
    DORA INVADERS DRAWING
    ================================================= */
-
-        else if (gameState == STATE_DORA_INVADERS)
+else if (gameState == STATE_DORA_INVADERS)
+{
+    if (invaderBackgroundTexture.id != 0)
+    {
+        Rectangle source =
         {
-            ClearBackground(BLACK);
+            0,
+            0,
+            (float)invaderBackgroundTexture.width,
+            (float)invaderBackgroundTexture.height
+        };
 
-            DrawDoraInvaders(
-                doraInvaders);
-        }
+        Rectangle destination =
+        {
+            0,
+            0,
+            (float)screenWidth,
+            (float)screenHeight
+        };
+
+        DrawTexturePro(
+            invaderBackgroundTexture,
+            source,
+            destination,
+            (Vector2){0,0},
+            0.0f,
+            WHITE
+        );
+    }
+    else
+    {
+        ClearBackground(BLACK);
+    }
+
+    DrawDoraInvaders(
+        doraInvaders);
+}
 
         /* =================================================
            CLOSING SCENE DRAWING

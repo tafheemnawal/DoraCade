@@ -6,8 +6,8 @@ static int GetGadgetPoints(GadgetType type)
 {
     switch(type)
     {
-        case ANYWHERE_DOOR:
-            return 50;
+        case DORACAKE:
+             return 50;
 
         case BAMBOO_COPTER:
             return 10;
@@ -33,8 +33,8 @@ static Color GetGadgetColor(GadgetType type)
 {
     switch(type)
     {
-        case ANYWHERE_DOOR:
-            return BLUE;
+        case DORACAKE:
+            return ORANGE;
 
         case BAMBOO_COPTER:
             return GREEN;
@@ -58,10 +58,10 @@ Gadget CreateGadget()
     Gadget gadget;
 
 
-    gadget.type = (GadgetType)GetRandomValue(
-    ANYWHERE_DOOR,
+   gadget.type = (GadgetType)GetRandomValue(
+    DORACAKE,
     BIG_LIGHT
-);
+); 
 
     // Starting position
     gadget.position.x = GetRandomValue(80, GetScreenWidth() - 80);
@@ -190,7 +190,7 @@ InvaderPlayer CreateInvaderPlayer(
         screenHeight - player.bounds.height - 20;
 
     // Movement speed
-    player.speed = 300;
+    player.speed = 500;
 
     return player;
 }
@@ -331,10 +331,10 @@ for(int i = 0; i < 5; i++)
     {
         game->misses++;
 
-        if(game->misses >= 3)
-        {
-            game->gameOver = true;
-        }
+            if(game->misses >= 5)
+    {
+        game->gameOver = true;
+    }
 
         ResetGadget(
             &game->gadgets[i]

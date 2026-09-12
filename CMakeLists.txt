@@ -16,3 +16,7 @@ add_executable(DoraCade
     src/Menu/menu.c
 )
 target_link_libraries(DoraCade PRIVATE raylib)
+
+# Copy assets folder after build
+file(COPY ${CMAKE_SOURCE_DIR}/assets
+     DESTINATION ${CMAKE_BINARY_DIR})
