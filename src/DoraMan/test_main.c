@@ -17,6 +17,7 @@ int main(void)
 
     PacPlayer pac;
     InitPacPlayer(&pac);
+    LoadPacPlayerTexture(&pac);
     InitPellets(pac.row, pac.col);
 
     Ghost ghost;
@@ -85,6 +86,7 @@ int main(void)
 
     UnloadTexture(backgroundTexture);
     UnloadGhostTexture(&ghost);
+    UnloadPacPlayerTexture(&pac);
     CloseWindow();
     return 0;
 }

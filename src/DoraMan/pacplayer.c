@@ -19,7 +19,7 @@ void InitPacPlayer(PacPlayer *pac) {
 
 void LoadPacPlayerTexture(PacPlayer *pac)
 {
-    pac->texture = LoadTexture("../assets/textures/pacman_player.png");
+    pac->texture = LoadTexture("../assets/textures/pacplayer.png");
 }
 
 void UnloadPacPlayerTexture(PacPlayer *pac)
