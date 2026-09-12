@@ -334,14 +334,28 @@ int main()
 
 
                 /* =========================================
-                   DORAMAZE
+                   DORAMAN
                    ========================================= */
 
                 else if (selectedGame == 1)
                 {
                     /*
-                     * DoraMaze will be connected here later.
-                     */
+                    * Reset DoraMan
+                    */
+                    ResetDoraMan(&pac, &ghost, MAZE_ROWS - 2, MAZE_COLS - 2);
+                    LoadPacPlayerTexture(&pac);
+                    LoadGhostTexture(&ghost);
+
+                    doramanScore = 0;
+                    doramanEnteringName = 0;
+                    doramanShowingHighScores = 0;
+                    doramanPlayerName[0] = '\0';
+                    doramanNameLength = 0;
+
+                    /*
+                    * Start DoraMan
+                    */
+                    gameState = STATE_DORAMAN;
                 }
 
 
