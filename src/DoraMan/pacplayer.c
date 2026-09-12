@@ -14,7 +14,8 @@ void InitPacPlayer(PacPlayer *pac) {
     pac->dirRow = 0;
     pac->dirCol = 0;
     
-    pac->speed = 200.0f; 
+    pac->speed = 200.0f;
+    pac->rotation = 0.0f;   
 }
 
 void LoadPacPlayerTexture(PacPlayer *pac)
@@ -29,10 +30,10 @@ void UnloadPacPlayerTexture(PacPlayer *pac)
 
 void UpdatePacPlayer(PacPlayer *pac, float dt) {
     // 1. Store input whenever key is pressed
-    if (IsKeyPressed(KEY_RIGHT)) { pac->dirRow = 0;  pac->dirCol = 1;  }
-    if (IsKeyPressed(KEY_LEFT))  { pac->dirRow = 0;  pac->dirCol = -1; }
-    if (IsKeyPressed(KEY_UP))    { pac->dirRow = -1; pac->dirCol = 0;  }
-    if (IsKeyPressed(KEY_DOWN))  { pac->dirRow = 1;  pac->dirCol = 0;  }
+    if (IsKeyPressed(KEY_RIGHT)) { pac->dirRow = 0;  pac->dirCol = 1;  pac->rotation = 0.0f;   }
+    if (IsKeyPressed(KEY_LEFT))  { pac->dirRow = 0;  pac->dirCol = -1; pac->rotation = 0.0f;   } 
+    if (IsKeyPressed(KEY_UP))    { pac->dirRow = -1; pac->dirCol = 0;  pac->rotation = 270.0f; }
+    if (IsKeyPressed(KEY_DOWN))  { pac->dirRow = 1;  pac->dirCol = 0;  pac->rotation = 90.0f;  }
 
     float targetX = pac->targetCol * TILE_SIZE;
     float targetY = pac->targetRow * TILE_SIZE;

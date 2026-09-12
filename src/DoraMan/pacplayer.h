@@ -14,6 +14,7 @@ typedef struct
     int dirRow;
     int dirCol;
     float speed;
+    float rotation;
     Texture2D texture;
 } PacPlayer;
 
