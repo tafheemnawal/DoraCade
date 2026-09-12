@@ -17,6 +17,16 @@ void InitPacPlayer(PacPlayer *pac) {
     pac->speed = 200.0f; 
 }
 
+void LoadPacPlayerTexture(PacPlayer *pac)
+{
+    pac->texture = LoadTexture("../assets/textures/pacman_player.png");
+}
+
+void UnloadPacPlayerTexture(PacPlayer *pac)
+{
+    UnloadTexture(pac->texture);
+}
+
 void UpdatePacPlayer(PacPlayer *pac, float dt) {
     // 1. Store input whenever key is pressed
     if (IsKeyPressed(KEY_RIGHT)) { pac->dirRow = 0;  pac->dirCol = 1;  }
