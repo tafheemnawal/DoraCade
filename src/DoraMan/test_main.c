@@ -21,6 +21,7 @@ int main(void)
 
     Ghost ghost;
     InitGhost(&ghost, MAZE_ROWS - 2, MAZE_COLS - 2);
+    LoadGhostTexture(&ghost);
 
     int score = 0;
     int gameOver = 0;
@@ -83,6 +84,7 @@ int main(void)
     }
 
     UnloadTexture(backgroundTexture);
+    UnloadGhostTexture(&ghost);
     CloseWindow();
     return 0;
 }
