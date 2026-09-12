@@ -269,6 +269,46 @@ if(game->bullet.active)
     }
 }
 
+ // Check bullet collision with gadgets
+if(game->bullet.active)
+{
+    for(int i = 0; i < 5; i++)
+    {
+        if(game->gadgets[i].active)
+        {
+            Rectangle gadgetRect =
+            {
+                game->gadgets[i].position.x - 20,
+                game->gadgets[i].position.y - 20,
+                40,
+                40
+            };
+
+
+            Rectangle bulletRect =
+            {
+                game->bullet.position.x - 3,
+                game->bullet.position.y,
+                6,
+                15
+            };
+
+
+            if(CheckCollisionRecs(
+                bulletRect,
+                gadgetRect))
+            {
+                game->gadgets[i].active = false;
+
+                game->score +=
+                    game->gadgets[i].points;
+
+                game->bullet.active = false;
+            }
+        }
+    }
+}
+
 
     // Update gadgets
    for(int i = 0; i < 5; i++)
@@ -317,4 +357,14 @@ if(game.bullet.active)
             game.gadgets[i]
         );
     }
+
+// Draw score
+DrawText(
+    TextFormat("Score: %d", game.score),
+    20,
+    20,
+    30,
+    WHITE
+);
+
 }
