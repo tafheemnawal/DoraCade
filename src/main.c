@@ -79,6 +79,18 @@ void ResetDoraRush(
 
 
 /* =========================================================
+   RESET DORAMAN
+   ========================================================= */
+
+void ResetDoraMan(PacPlayer *pac, Ghost *ghost, int startRow, int startCol)
+{
+    InitPacPlayer(pac);
+    InitPellets(pac->row, pac->col);
+    InitGhost(ghost, startRow, startCol);
+}
+
+
+/* =========================================================
    MAIN
    ========================================================= */
 
@@ -216,7 +228,7 @@ int main()
      */
     bool enteringName = false;
     bool showingHighScores = false;
-    
+
 
     /* =====================================================
        DORAMAN OBJECTS
