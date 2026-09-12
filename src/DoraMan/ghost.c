@@ -19,6 +19,16 @@ void InitGhost(Ghost *ghost, int startRow, int startCol)
     ghost->speed = 120.0f;
 }
 
+void LoadGhostTexture(Ghost *ghost)
+{
+    ghost->texture = LoadTexture("../assets/textures/ghost.png");
+}
+
+void UnloadGhostTexture(Ghost *ghost)
+{
+    UnloadTexture(ghost->texture);
+}
+
 void PickRandomDirection(Ghost *ghost)
 {
     int options[4][2] = {
