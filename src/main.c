@@ -7,6 +7,12 @@
 #include "DoraRush/highscore.h"
 #include "Menu/menu.h"
 
+#include "DoraMan/maze.h"          
+#include "DoraMan/pacplayer.h"     
+#include "DoraMan/pellet.h"         
+#include "DoraMan/ghost.h"         
+#include "DoraMan/doraman_highscore.h"   
+
 #define PIPE_COUNT 4
 #define CLOSING_TIME 3.0f
 
@@ -15,7 +21,9 @@ typedef enum
     STATE_MENU,
     STATE_PLAYING,
     STATE_GAMEOVER,
-    STATE_CLOSING
+    STATE_CLOSING,
+    STATE_DORAMAN,           
+    STATE_DORAMAN_GAMEOVER   
 } GameState;
 
 
@@ -67,6 +75,18 @@ void ResetDoraRush(
             &pipe[i]
         );
     }
+}
+
+
+/* =========================================================
+   RESET DORAMAN
+   ========================================================= */
+
+void ResetDoraMan(PacPlayer *pac, Ghost *ghost, int startRow, int startCol)
+{
+    InitPacPlayer(pac);
+    InitPellets(pac->row, pac->col);
+    InitGhost(ghost, startRow, startCol);
 }
 
 
@@ -211,6 +231,26 @@ int main()
 
 
     /* =====================================================
+       DORAMAN OBJECTS
+       ===================================================== */
+
+    PacPlayer pac;
+    Ghost ghost;
+
+    Texture2D doramanBackgroundTexture = LoadTexture("../assets/textures/doraman_background.png");
+
+    DoraManHighScore doramanHighScores[MAX_DORAMAN_SCORES];
+    LoadDoraManHighScores(doramanHighScores);
+
+    char doramanPlayerName[DORAMAN_NAME_LENGTH] = "";
+    int doramanNameLength = 0;
+    int doramanEnteringName = 0;
+    int doramanShowingHighScores = 0;
+
+    int doramanScore = 0;
+
+
+    /* =====================================================
        GAME STATE
        ===================================================== */
 
@@ -294,14 +334,37 @@ int main()
 
 
                 /* =========================================
-                   DORAMAZE
+                   DORAMAN
                    ========================================= */
 
                 else if (selectedGame == 1)
                 {
                     /*
-                     * DoraMaze will be connected here later.
-                     */
+                    * Reset DoraMan
+                    */
+                    ResetDoraMan(&pac, &ghost, MAZE_ROWS - 2, MAZE_COLS - 2);
+                    LoadPacPlayerTexture(&pac);
+                    LoadGhostTexture(&ghost);
+
+                    int doramanWidth = MAZE_COLS * TILE_SIZE;
+                    int doramanHeight = MAZE_ROWS * TILE_SIZE;
+
+                    SetWindowSize(doramanWidth, doramanHeight);
+                    SetWindowPosition(
+                        (GetMonitorWidth(GetCurrentMonitor()) - doramanWidth) / 2,
+                        (GetMonitorHeight(GetCurrentMonitor()) - doramanHeight) / 2
+                    );
+
+                    doramanScore = 0;
+                    doramanEnteringName = 0;
+                    doramanShowingHighScores = 0;
+                    doramanPlayerName[0] = '\0';
+                    doramanNameLength = 0;
+
+                    /*
+                    * Start DoraMan
+                    */
+                    gameState = STATE_DORAMAN;
                 }
 
 
@@ -575,6 +638,117 @@ int main()
 
 
         /* =================================================
+            DORAMAN
+           ================================================= */
+
+        else if (gameState == STATE_DORAMAN)
+        {
+            UpdatePacPlayer(&pac, dt);
+            UpdateGhost(&ghost, dt);
+
+            if (CollectPellet(pac.row, pac.col))
+            {
+                doramanScore += 10;
+            }
+
+            if (AllPelletsCollected())
+            {
+                ResetDoraMan(&pac, &ghost, MAZE_ROWS - 2, MAZE_COLS - 2);
+            }
+
+            if (CheckGhostCollision(&ghost, pac.x, pac.y))
+            {
+                gameState = STATE_DORAMAN_GAMEOVER;
+                doramanEnteringName = 1;
+                doramanPlayerName[0] = '\0';
+                doramanNameLength = 0;
+            }
+
+            if (IsKeyPressed(KEY_ESCAPE))
+            {
+                UnloadPacPlayerTexture(&pac);
+                UnloadGhostTexture(&ghost);
+                SetWindowSize(screenWidth, screenHeight);
+                SetWindowPosition(
+                    (GetMonitorWidth(GetCurrentMonitor()) - screenWidth) / 2,
+                    (GetMonitorHeight(GetCurrentMonitor()) - screenHeight) / 2
+                );
+                
+                closingTimer = 0.0f;
+                gameState = STATE_CLOSING;
+            }
+        }
+
+
+        /* =================================================
+            DORAMAN GAME OVER
+           ================================================= */
+
+        else if (gameState == STATE_DORAMAN_GAMEOVER)
+        {
+            if (doramanEnteringName)
+            {
+                int key = GetCharPressed();
+                while (key > 0)
+                {
+                    if (key >= 32 && key <= 125 && doramanNameLength < DORAMAN_NAME_LENGTH - 1)
+                    {
+                        doramanPlayerName[doramanNameLength] = (char)key;
+                        doramanNameLength++;
+                        doramanPlayerName[doramanNameLength] = '\0';
+                    }
+                    key = GetCharPressed();
+                }
+
+                if (IsKeyPressed(KEY_BACKSPACE) && doramanNameLength > 0)
+                {
+                    doramanNameLength--;
+                    doramanPlayerName[doramanNameLength] = '\0';
+                }
+
+                if (IsKeyPressed(KEY_ENTER))
+                {
+                    if (doramanNameLength == 0)
+                    {
+                        strcpy(doramanPlayerName, "Player");
+                    }
+
+                    AddDoraManHighScore(doramanHighScores, doramanPlayerName, doramanScore);
+
+                    doramanEnteringName = 0;
+                    doramanShowingHighScores = 1;
+                }
+            }
+            else if (doramanShowingHighScores)
+            {
+                if (IsKeyPressed(KEY_R))
+                {
+                    ResetDoraMan(&pac, &ghost, MAZE_ROWS - 2, MAZE_COLS - 2);
+                    LoadPacPlayerTexture(&pac);
+                    LoadGhostTexture(&ghost);
+                    doramanScore = 0;
+                    doramanShowingHighScores = 0;
+                    gameState = STATE_DORAMAN;
+                }
+            }
+
+            if (IsKeyPressed(KEY_ESCAPE))
+            {
+                UnloadPacPlayerTexture(&pac);
+                UnloadGhostTexture(&ghost);
+                SetWindowSize(screenWidth, screenHeight);
+                SetWindowPosition(
+                    (GetMonitorWidth(GetCurrentMonitor()) - screenWidth) / 2,
+                    (GetMonitorHeight(GetCurrentMonitor()) - screenHeight) / 2
+                );
+                
+                closingTimer = 0.0f;
+                gameState = STATE_CLOSING;
+            }
+        }
+
+
+        /* =================================================
            CLOSING SCENE
            ================================================= */
 
@@ -843,6 +1017,52 @@ int main()
 
 
         /* =================================================
+           DORAMAN DRAWING
+           ================================================= */
+
+        else if (gameState == STATE_DORAMAN ||
+                 gameState == STATE_DORAMAN_GAMEOVER)
+        {
+            ClearBackground(BLACK);
+
+            int doramanWidth = MAZE_COLS * TILE_SIZE;
+            int doramanHeight = MAZE_ROWS * TILE_SIZE;
+
+            DrawTexturePro(
+                doramanBackgroundTexture,
+                (Rectangle){ 0, 0, (float)doramanBackgroundTexture.width, (float)doramanBackgroundTexture.height },
+                (Rectangle){ 0, 0, (float)doramanWidth, (float)doramanHeight },
+                (Vector2){ 0, 0 },
+                0.0f,
+                WHITE
+            );
+
+            DrawMaze();
+            DrawPellets();
+            DrawPacPlayer(&pac);
+            DrawGhost(&ghost);
+
+            DrawText(TextFormat("Score: %d", doramanScore), 10, 10, 20, WHITE);
+
+            if (gameState == STATE_DORAMAN_GAMEOVER)
+            {
+                if (doramanEnteringName)
+                {
+                    DrawText("GAME OVER", doramanWidth / 2 - 150, doramanHeight / 2 - 60, 50, WHITE);
+                    DrawText("Enter your name: ", doramanWidth / 2 - 120, doramanHeight / 2, 20, YELLOW);
+                    DrawText(doramanPlayerName, doramanWidth / 2 + 70, doramanHeight / 2, 20, WHITE);
+                }
+                else if (doramanShowingHighScores)
+                {
+                    DrawDoraManHighScores(doramanHighScores, doramanWidth);
+                    DrawText("Press R to restart", doramanWidth / 2 - 100, doramanHeight / 2 + 60, 20, WHITE);
+                    DrawText("Press ESC for Main Menu", doramanWidth / 2 - 130, doramanHeight / 2 + 90, 20, WHITE);
+                }
+            }
+        }
+
+
+        /* =================================================
            CLOSING SCENE DRAWING
            ================================================= */
 
@@ -907,6 +1127,8 @@ int main()
     UnloadTexture(backgroundTexture);
 
     UnloadTexture(closingTexture);
+
+    UnloadTexture(doramanBackgroundTexture);  
 
 
     /*
