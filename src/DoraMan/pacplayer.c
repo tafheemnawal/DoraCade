@@ -85,9 +85,16 @@ void DrawPacPlayer(PacPlayer *pac)
     float sourceWidth = (float)pac->texture.width;
     float sourceHeight = (float)pac->texture.height;
 
+    // Flip horizontally when facing left
+    if (pac->dirCol == -1)
+    {
+        sourceX = sourceWidth;
+        sourceWidth = -sourceWidth;
+    }
+
     Rectangle source = { sourceX, 0.0f, sourceWidth, sourceHeight };
     Rectangle dest = { tileCenterX, tileCenterY, desiredSize, desiredSize };
     Vector2 origin = { halfDesired, halfDesired };
 
-    DrawTexturePro(pac->texture, source, dest, origin, 0.0f, WHITE);
+    DrawTexturePro(pac->texture, source, dest, origin, pac->rotation, WHITE);
 }
