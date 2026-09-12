@@ -237,7 +237,7 @@ int main()
     PacPlayer pac;
     Ghost ghost;
 
-    Texture2D doramanBackgroundTexture = LoadTexture("assets/textures/doraman_background.png");
+    Texture2D doramanBackgroundTexture = LoadTexture("../assets/textures/doraman_background.png");
 
     DoraManHighScore doramanHighScores[MAX_DORAMAN_SCORES];
     LoadDoraManHighScores(doramanHighScores);
@@ -345,6 +345,15 @@ int main()
                     ResetDoraMan(&pac, &ghost, MAZE_ROWS - 2, MAZE_COLS - 2);
                     LoadPacPlayerTexture(&pac);
                     LoadGhostTexture(&ghost);
+
+                    int doramanWidth = MAZE_COLS * TILE_SIZE;
+                    int doramanHeight = MAZE_ROWS * TILE_SIZE;
+
+                    SetWindowSize(doramanWidth, doramanHeight);
+                    SetWindowPosition(
+                        (GetMonitorWidth(GetCurrentMonitor()) - doramanWidth) / 2,
+                        (GetMonitorHeight(GetCurrentMonitor()) - doramanHeight) / 2
+                    );
 
                     doramanScore = 0;
                     doramanEnteringName = 0;
@@ -659,6 +668,12 @@ int main()
             {
                 UnloadPacPlayerTexture(&pac);
                 UnloadGhostTexture(&ghost);
+                SetWindowSize(screenWidth, screenHeight);
+                SetWindowPosition(
+                    (GetMonitorWidth(GetCurrentMonitor()) - screenWidth) / 2,
+                    (GetMonitorHeight(GetCurrentMonitor()) - screenHeight) / 2
+                );
+                
                 closingTimer = 0.0f;
                 gameState = STATE_CLOSING;
             }
@@ -721,6 +736,12 @@ int main()
             {
                 UnloadPacPlayerTexture(&pac);
                 UnloadGhostTexture(&ghost);
+                SetWindowSize(screenWidth, screenHeight);
+                SetWindowPosition(
+                    (GetMonitorWidth(GetCurrentMonitor()) - screenWidth) / 2,
+                    (GetMonitorHeight(GetCurrentMonitor()) - screenHeight) / 2
+                );
+                
                 closingTimer = 0.0f;
                 gameState = STATE_CLOSING;
             }
@@ -1000,12 +1021,17 @@ int main()
            ================================================= */
 
         else if (gameState == STATE_DORAMAN ||
-                gameState == STATE_DORAMAN_GAMEOVER)
+                 gameState == STATE_DORAMAN_GAMEOVER)
         {
+            ClearBackground(BLACK);
+
+            int doramanWidth = MAZE_COLS * TILE_SIZE;
+            int doramanHeight = MAZE_ROWS * TILE_SIZE;
+
             DrawTexturePro(
                 doramanBackgroundTexture,
                 (Rectangle){ 0, 0, (float)doramanBackgroundTexture.width, (float)doramanBackgroundTexture.height },
-                (Rectangle){ 0, 0, (float)screenWidth, (float)screenHeight },
+                (Rectangle){ 0, 0, (float)doramanWidth, (float)doramanHeight },
                 (Vector2){ 0, 0 },
                 0.0f,
                 WHITE
@@ -1022,14 +1048,14 @@ int main()
             {
                 if (doramanEnteringName)
                 {
-                    DrawText("GAME OVER", screenWidth / 2 - 150, screenHeight / 2 - 60, 50, WHITE);
-                    DrawText("Enter your name: ", screenWidth / 2 - 120, screenHeight / 2, 20, YELLOW);
-                    DrawText(playerName, screenWidth / 2 + 70, screenHeight / 2, 20, WHITE);
+                    DrawText("GAME OVER", doramanWidth / 2 - 150, doramanHeight / 2 - 60, 50, WHITE);
+                    DrawText("Enter your name: ", doramanWidth / 2 - 120, doramanHeight / 2, 20, YELLOW);
+                    DrawText(doramanPlayerName, doramanWidth / 2 + 70, doramanHeight / 2, 20, WHITE);
                 }
                 else if (doramanShowingHighScores)
                 {
-                    DrawDoraManHighScores(highScores, screenWidth);
-                    DrawText("Press R to restart", screenWidth / 2 - 100, screenHeight / 2 + 60, 20, WHITE);
+                    DrawDoraManHighScores(doramanHighScores, doramanWidth);
+                    DrawText("Press R to restart", doramanWidth / 2 - 100, doramanHeight / 2 + 60, 20, WHITE);
                 }
             }
         }
@@ -1100,6 +1126,8 @@ int main()
     UnloadTexture(backgroundTexture);
 
     UnloadTexture(closingTexture);
+
+    UnloadTexture(doramanBackgroundTexture);  
 
 
     /*
