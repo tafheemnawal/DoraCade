@@ -1,8 +1,10 @@
 #include <raylib.h>
+#include <string.h>
 #include "maze.h"
 #include "pacplayer.h"
 #include "pellet.h"
 #include "ghost.h"
+#include "doraman_highscore.h"
 
 int main(void)
 {
@@ -23,6 +25,14 @@ int main(void)
     Ghost ghost;
     InitGhost(&ghost, MAZE_ROWS - 2, MAZE_COLS - 2);
     LoadGhostTexture(&ghost);
+
+    DoraManHighScore highScores[MAX_DORAMAN_SCORES];
+    LoadDoraManHighScores(highScores);
+
+    char playerName[DORAMAN_NAME_LENGTH] = "";
+    int nameLength = 0;
+    int enteringName = 0;
+    int showingHighScores = 0;
 
     int score = 0;
     int gameOver = 0;
@@ -52,16 +62,60 @@ int main(void)
             if (CheckGhostCollision(&ghost, pac.x, pac.y))
             {
                 gameOver = 1;
+                enteringName = 1;
+                playerName[0] = '\0';
+                nameLength = 0;
             }
         }
-
-        if (gameOver && IsKeyPressed(KEY_R))
+        else if (enteringName)
         {
-            InitPacPlayer(&pac);
-            InitPellets(pac.row, pac.col);
-            InitGhost(&ghost, MAZE_ROWS - 2, MAZE_COLS - 2);
-            score = 0;
-            gameOver = 0;
+            int key = GetCharPressed();
+            while (key > 0)
+            {
+                if (key >= 32 && key <= 125 && nameLength < DORAMAN_NAME_LENGTH - 1)
+                {
+                    playerName[nameLength] = (char)key;
+                    nameLength++;
+                    playerName[nameLength] = '\0';
+                }
+                key = GetCharPressed();
+            }
+
+            if (IsKeyPressed(KEY_BACKSPACE) && nameLength > 0)
+            {
+                nameLength--;
+                playerName[nameLength] = '\0';
+            }
+
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                if (nameLength == 0)
+                {
+                    strcpy(playerName, "Player");
+                }
+
+                AddDoraManHighScore(highScores, playerName, score);
+
+                enteringName = 0;
+                showingHighScores = 1;
+            }
+        }
+        else if (showingHighScores)
+        {
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                showingHighScores = 0;
+            }
+
+            if (IsKeyPressed(KEY_R))
+            {
+                InitPacPlayer(&pac);
+                InitPellets(pac.row, pac.col);
+                InitGhost(&ghost, MAZE_ROWS - 2, MAZE_COLS - 2);
+                score = 0;
+                gameOver = 0;
+                showingHighScores = 0;
+            }
         }
 
         BeginDrawing();
@@ -83,10 +137,16 @@ int main(void)
 
         DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
 
-        if (gameOver)
+        if (enteringName)
         {
-            DrawText("GAME OVER", screenWidth / 2 - 120, screenHeight / 2 - 20, 40, RED);
-            DrawText("Press R to Restart", screenWidth / 2 - 100, screenHeight / 2 + 30, 20, WHITE);
+            DrawText("GAME OVER", screenWidth / 2 - 150, screenHeight / 2 - 60, 50, WHITE);
+            DrawText("Enter your name: ", screenWidth / 2 - 120, screenHeight / 2, 20, YELLOW);
+            DrawText(playerName, screenWidth / 2 + 70, screenHeight / 2, 20, WHITE);
+        }
+        else if (showingHighScores)
+        {
+            DrawDoraManHighScores(highScores, screenWidth);
+            DrawText("Press R to restart", screenWidth / 2 - 100, screenHeight / 2 + 60, 20, WHITE);
         }
 
         EndDrawing();

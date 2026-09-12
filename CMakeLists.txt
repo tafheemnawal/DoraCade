@@ -21,5 +21,6 @@ add_executable(DoraManTest
     src/DoraMan/pacplayer.c
     src/DoraMan/pellet.c
     src/DoraMan/ghost.c
+    src/DoraMan/doraman_highscore.c
 )
 target_link_libraries(DoraManTest PRIVATE raylib)
