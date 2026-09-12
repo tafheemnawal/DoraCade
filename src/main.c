@@ -996,6 +996,46 @@ int main()
 
 
         /* =================================================
+           DORAMAN DRAWING
+           ================================================= */
+
+        else if (gameState == STATE_DORAMAN ||
+                gameState == STATE_DORAMAN_GAMEOVER)
+        {
+            DrawTexturePro(
+                doramanBackgroundTexture,
+                (Rectangle){ 0, 0, (float)doramanBackgroundTexture.width, (float)doramanBackgroundTexture.height },
+                (Rectangle){ 0, 0, (float)screenWidth, (float)screenHeight },
+                (Vector2){ 0, 0 },
+                0.0f,
+                WHITE
+            );
+
+            DrawMaze();
+            DrawPellets();
+            DrawPacPlayer(&pac);
+            DrawGhost(&ghost);
+
+            DrawText(TextFormat("Score: %d", doramanScore), 10, 10, 20, WHITE);
+
+            if (gameState == STATE_DORAMAN_GAMEOVER)
+            {
+                if (doramanEnteringName)
+                {
+                    DrawText("GAME OVER", screenWidth / 2 - 150, screenHeight / 2 - 60, 50, WHITE);
+                    DrawText("Enter your name: ", screenWidth / 2 - 120, screenHeight / 2, 20, YELLOW);
+                    DrawText(playerName, screenWidth / 2 + 70, screenHeight / 2, 20, WHITE);
+                }
+                else if (doramanShowingHighScores)
+                {
+                    DrawDoraManHighScores(highScores, screenWidth);
+                    DrawText("Press R to restart", screenWidth / 2 - 100, screenHeight / 2 + 60, 20, WHITE);
+                }
+            }
+        }
+
+
+        /* =================================================
            CLOSING SCENE DRAWING
            ================================================= */
 
