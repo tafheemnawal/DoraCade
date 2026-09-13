@@ -11,6 +11,7 @@
 
 #define PIPE_COUNT 4
 #define CLOSING_TIME 3.0f
+Sound shootSound;
 
 typedef enum
 {
@@ -77,7 +78,6 @@ int main()
 {
     const int screenWidth = 1280;
     const int screenHeight = 720;
-
     /* =====================================================
        WINDOW
        ===================================================== */
@@ -86,6 +86,7 @@ int main()
         screenWidth,
         screenHeight,
         "DoraCade");
+    InitAudioDevice();
 
     /*
      * ESC is controlled by our game states.
@@ -126,6 +127,10 @@ int main()
         "../assets/textures/dora_invaders/background.png");
      
         LoadDoraInvadersTextures();
+
+        shootSound = LoadSound(
+    "../assets/sounds/shoot.wav"
+     );
 
     /* =====================================================
        DORARUSH OBJECTS

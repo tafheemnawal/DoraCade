@@ -2,6 +2,8 @@
 #define DORA_INVADERS_H
 #include "raylib.h"
 
+extern Sound shootSound;
+
 //gadget type
 typedef enum
 {

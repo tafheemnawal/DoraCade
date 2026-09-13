@@ -238,7 +238,7 @@ void FireInvaderBullet(
             player.bounds.y;
 
 
-        bullet->speed = 500;
+        bullet->speed = 700;
 
         bullet->active = true;
     }
@@ -290,13 +290,20 @@ void InitDoraInvaders(
     // Create gadgets
    for(int i = 0; i < 5; i++)
 {
+    game->gadgets[i].active = false;
+}
+
+
+// Start with only 3 gadgets
+for(int i = 0; i < 3; i++)
+{
     game->gadgets[i] = CreateGadget();
 
     game->gadgets[i].position.x =
-    GetRandomValue(80, screenWidth - 80);
+        GetRandomValue(150, screenWidth - 150);
 
     game->gadgets[i].position.y =
-        -100 - (i * 120);
+        -100 - (i * 250);
 }
 
 
@@ -345,6 +352,8 @@ if(IsKeyPressed(KEY_SPACE))
         &game->bullet,
         game->player
     );
+
+    PlaySound(shootSound);
 }
 
 // Update bullet
