@@ -114,7 +114,7 @@ int main()
         screenHeight,
         "DoraCade");
 
-    InitAudioDevice();
+   ChangeDirectory(GetApplicationDirectory());
 
     /*
      * ESC is controlled by our game states.
@@ -136,31 +136,30 @@ int main()
     /*
      * DoraRush pipe texture
      */
-    Texture2D pipeTexture =
-    LoadTexture("../assets/textures/pipe.png");
+   Texture2D pipeTexture =
+    LoadTexture("assets/textures/dorarush/pipe.png");
 
 
     /*
      * Background
      */
     Texture2D backgroundTexture =
-    LoadTexture("../assets/textures/background.png");
+    LoadTexture("assets/textures/dorarush/background.png");
 
 
     /*
      * Closing scene
      */
     Texture2D closingTexture =
-    LoadTexture("../assets/textures/doracade_closing.png");
-    Texture2D invaderBackgroundTexture =
-    LoadTexture(
-        "../assets/textures/dora_invaders/background.png");
-     
-        LoadDoraInvadersTextures();
+    LoadTexture("assets/textures/misc/doracade_closing.png");
 
-        shootSound = LoadSound(
-    "../assets/sounds/shoot.wav"
-     );
+Texture2D invaderBackgroundTexture =
+    LoadTexture("assets/textures/dora_invaders/background.png");
+
+LoadDoraInvadersTextures();
+
+shootSound =
+    LoadSound("assets/sounds/shoot.wav");
 
 
     /* =====================================================
@@ -253,7 +252,8 @@ int main()
     PacPlayer pac;
     Ghost ghost;
 
-    Texture2D doramanBackgroundTexture = LoadTexture("../assets/textures/doraman/doraman_background.png");
+    Texture2D doramanBackgroundTexture =
+    LoadTexture("assets/textures/doraman/doraman_background.png");
 
     DoraManHighScore doramanHighScores[MAX_DORAMAN_SCORES];
     LoadDoraManHighScores(doramanHighScores);
@@ -281,7 +281,8 @@ int main()
        ===================================================== */
 
     while (!WindowShouldClose())
-    {   TraceLog(LOG_INFO, "GAME LOOP RUNNING");
+    { 
+
         float dt = GetFrameTime();
 
 

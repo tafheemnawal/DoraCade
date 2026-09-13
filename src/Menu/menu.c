@@ -25,7 +25,7 @@ void InitMenu(Menu *menu, int screenWidth, int screenHeight)
      * DoraCade opening logo
      */
     menu->logo = LoadTexture(
-        "../assets/textures/misc/doracade_logo.png"
+        "assets/textures/misc/doracade_logo.png"
     );
 
 
