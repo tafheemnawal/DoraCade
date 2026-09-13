@@ -55,7 +55,7 @@ void InitPlayer(Player *player, int screenWidth, int screenHeight)
     player->velocityY = 0.0f;
     player->color = BLUE;
 
-    player->texture = LoadTexture("../assets/textures/flying doraemon.png");
+    player->texture = LoadTexture("../assets/textures/dorarush/flying doraemon.png");
 
     player->width = 84;
     player->height = 84;

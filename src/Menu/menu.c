@@ -1,7 +1,7 @@
 #include "menu.h"
 #include <raylib.h>
 
-#define OPENING_TIME 2.5f
+#define OPENING_TIME 5.8f
 #define GAME_COUNT 3
 
 
@@ -25,7 +25,7 @@ void InitMenu(Menu *menu, int screenWidth, int screenHeight)
      * DoraCade opening logo
      */
     menu->logo = LoadTexture(
-        "../assets/textures/doracade_logo.png"
+        "../assets/textures/misc/doracade_logo.png"
     );
 
 
@@ -34,7 +34,7 @@ void InitMenu(Menu *menu, int screenWidth, int screenHeight)
      * Game-selection background
      */
     menu->background = LoadTexture(
-        "../assets/textures/menu_background.png"
+        "../assets/textures/misc/menu_background.png"
     );
 }
 

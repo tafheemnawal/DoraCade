@@ -6,15 +6,16 @@
 #include "DoraRush/coin.h"
 #include "DoraRush/highscore.h"
 #include "Menu/menu.h"
+#include "Audio/audio.h"
 
-#include "DoraMan/maze.h"          
-#include "DoraMan/pacplayer.h"     
-#include "DoraMan/pellet.h"         
-#include "DoraMan/ghost.h"         
-#include "DoraMan/doraman_highscore.h"   
+#include "DoraMan/maze.h"
+#include "DoraMan/pacplayer.h"
+#include "DoraMan/pellet.h"
+#include "DoraMan/ghost.h"
+#include "DoraMan/doraman_highscore.h"
 
 #define PIPE_COUNT 4
-#define CLOSING_TIME 3.0f
+#define CLOSING_TIME 2.0f
 
 typedef enum
 {
@@ -22,10 +23,9 @@ typedef enum
     STATE_PLAYING,
     STATE_GAMEOVER,
     STATE_CLOSING,
-    STATE_DORAMAN,           
-    STATE_DORAMAN_GAMEOVER   
+    STATE_DORAMAN,
+    STATE_DORAMAN_GAMEOVER
 } GameState;
-
 
 /* =========================================================
    RESET DORARUSH
@@ -44,8 +44,7 @@ void ResetDoraRush(
     InitPlayer(
         player,
         screenWidth,
-        screenHeight
-    );
+        screenHeight);
 
     /*
      * Reset pipes
@@ -54,8 +53,7 @@ void ResetDoraRush(
     {
         InitPipe(
             &pipe[i],
-            screenWidth
-        );
+            screenWidth);
 
         pipe[i].x += i * 350;
     }
@@ -72,11 +70,9 @@ void ResetDoraRush(
     {
         InitCoin(
             &coin[i],
-            &pipe[i]
-        );
+            &pipe[i]);
     }
 }
-
 
 /* =========================================================
    RESET DORAMAN
@@ -89,7 +85,6 @@ void ResetDoraMan(PacPlayer *pac, Ghost *ghost, int startRow, int startCol)
     InitGhost(ghost, startRow, startCol);
 }
 
-
 /* =========================================================
    MAIN
    ========================================================= */
@@ -99,7 +94,6 @@ int main()
     const int screenWidth = 1280;
     const int screenHeight = 720;
 
-
     /* =====================================================
        WINDOW
        ===================================================== */
@@ -107,8 +101,7 @@ int main()
     InitWindow(
         screenWidth,
         screenHeight,
-        "DoraCade"
-    );
+        "DoraCade");
 
     /*
      * ESC is controlled by our game states.
@@ -117,7 +110,8 @@ int main()
     SetExitKey(KEY_NULL);
 
     SetTargetFPS(60);
-
+    InitGameAudio();
+    PlayIntroMusic();
 
     /* =====================================================
        TEXTURES
@@ -128,27 +122,21 @@ int main()
      */
     Texture2D pipeTexture =
         LoadTexture(
-            "../assets/textures/pipe.png"
-        );
-
+            "../assets/textures/dorarush/pipe.png");
 
     /*
      * Background
      */
     Texture2D backgroundTexture =
         LoadTexture(
-            "../assets/textures/background.png"
-        );
-
+            "../assets/textures/dorarush/background.png");
 
     /*
      * Closing scene
      */
     Texture2D closingTexture =
         LoadTexture(
-            "../assets/textures/doracade_closing.png"
-        );
-
+            "../assets/textures/misc/doracade_closing.png");
 
     /* =====================================================
        DORARUSH OBJECTS
@@ -163,7 +151,6 @@ int main()
      */
     Coin coin[PIPE_COUNT];
 
-
     /* =====================================================
        MENU
        ===================================================== */
@@ -173,9 +160,7 @@ int main()
     InitMenu(
         &menu,
         screenWidth,
-        screenHeight
-    );
-
+        screenHeight);
 
     /* =====================================================
        INITIALIZE DORARUSH
@@ -186,9 +171,7 @@ int main()
         pipe,
         coin,
         screenWidth,
-        screenHeight
-    );
-
+        screenHeight);
 
     /*
      * IMPORTANT:
@@ -203,7 +186,6 @@ int main()
     {
         LoadCoinTexture(&coin[i]);
     }
-
 
     /* =====================================================
        HIGH SCORES
@@ -229,7 +211,6 @@ int main()
     bool enteringName = false;
     bool showingHighScores = false;
 
-
     /* =====================================================
        DORAMAN OBJECTS
        ===================================================== */
@@ -237,7 +218,7 @@ int main()
     PacPlayer pac;
     Ghost ghost;
 
-    Texture2D doramanBackgroundTexture = LoadTexture("../assets/textures/doraman_background.png");
+    Texture2D doramanBackgroundTexture = LoadTexture("../assets/textures/doraman/doraman_background.png");
 
     DoraManHighScore doramanHighScores[MAX_DORAMAN_SCORES];
     LoadDoraManHighScores(doramanHighScores);
@@ -249,7 +230,6 @@ int main()
 
     int doramanScore = 0;
 
-
     /* =====================================================
        GAME STATE
        ===================================================== */
@@ -260,7 +240,6 @@ int main()
 
     float closingTimer = 0.0f;
 
-
     /* =====================================================
        MAIN LOOP
        ===================================================== */
@@ -269,6 +248,7 @@ int main()
     {
         float dt = GetFrameTime();
 
+        UpdateGameAudio();
 
         /* =================================================
            MENU
@@ -281,9 +261,7 @@ int main()
              */
             UpdateMenu(
                 &menu,
-                dt
-            );
-
+                dt);
 
             /*
              * ENTER selects a game
@@ -294,24 +272,22 @@ int main()
                 int selectedGame =
                     GetSelectedGame(&menu);
 
-
                 /* =========================================
                    DORARUSH
                    ========================================= */
 
                 if (selectedGame == 0)
                 {
-                    /*
-                     * Reset DoraRush
-                     */
+                    StopIntroMusic();
+                    PlayTransitionSound();
+                    PlayGameMusic();
+
                     ResetDoraRush(
                         &player,
                         pipe,
                         coin,
                         screenWidth,
-                        screenHeight
-                    );
-
+                        screenHeight);
                     /*
                      * Reset score
                      */
@@ -332,16 +308,19 @@ int main()
                     gameState = STATE_PLAYING;
                 }
 
-
                 /* =========================================
                    DORAMAN
                    ========================================= */
 
                 else if (selectedGame == 1)
                 {
+                    StopIntroMusic();
+                    PlayTransitionSound();
+                    PlayGameMusic();
+
                     /*
-                    * Reset DoraMan
-                    */
+                     * Reset DoraMan
+                     */
                     ResetDoraMan(&pac, &ghost, MAZE_ROWS - 2, MAZE_COLS - 2);
                     LoadPacPlayerTexture(&pac);
                     LoadGhostTexture(&ghost);
@@ -352,8 +331,7 @@ int main()
                     SetWindowSize(doramanWidth, doramanHeight);
                     SetWindowPosition(
                         (GetMonitorWidth(GetCurrentMonitor()) - doramanWidth) / 2,
-                        (GetMonitorHeight(GetCurrentMonitor()) - doramanHeight) / 2
-                    );
+                        (GetMonitorHeight(GetCurrentMonitor()) - doramanHeight) / 2);
 
                     doramanScore = 0;
                     doramanEnteringName = 0;
@@ -362,11 +340,10 @@ int main()
                     doramanNameLength = 0;
 
                     /*
-                    * Start DoraMan
-                    */
+                     * Start DoraMan
+                     */
                     gameState = STATE_DORAMAN;
                 }
-
 
                 /* =========================================
                    GADGET INVADERS
@@ -381,7 +358,6 @@ int main()
             }
         }
 
-
         /* =================================================
            DORARUSH
            ================================================= */
@@ -395,9 +371,7 @@ int main()
                 &player,
                 screenWidth,
                 screenHeight,
-                dt
-            );
-
+                dt);
 
             /* =============================================
                PIPES
@@ -410,9 +384,7 @@ int main()
                     pipe,
                     PIPE_COUNT,
                     screenWidth,
-                    dt
-                );
-
+                    dt);
 
                 /*
                  * Pipe score
@@ -423,7 +395,6 @@ int main()
                 {
                     score++;
                 }
-
 
                 /*
                  * Pipe collision
@@ -446,7 +417,6 @@ int main()
                 }
             }
 
-
             /* =============================================
                DORACAKES
                ============================================= */
@@ -458,9 +428,7 @@ int main()
                  */
                 UpdateCoin(
                     &coin[i],
-                    &pipe[i]
-                );
-
+                    &pipe[i]);
 
                 /*
                  * DoraCake collision
@@ -473,7 +441,6 @@ int main()
                 }
             }
         }
-
 
         /* =================================================
            GAME OVER
@@ -513,7 +480,6 @@ int main()
                     key = GetCharPressed();
                 }
 
-
                 /*
                  * Backspace
                  */
@@ -525,7 +491,6 @@ int main()
                     playerName[nameLength] =
                         '\0';
                 }
-
 
                 /*
                  * ENTER:
@@ -544,10 +509,8 @@ int main()
                     {
                         strcpy(
                             playerName,
-                            "Player"
-                        );
+                            "Player");
                     }
-
 
                     /*
                      * Add score to Top 3
@@ -555,9 +518,7 @@ int main()
                     AddHighScore(
                         highScores,
                         playerName,
-                        score
-                    );
-
+                        score);
 
                     /*
                      * Move to Top 3 screen
@@ -566,7 +527,6 @@ int main()
                     showingHighScores = true;
                 }
             }
-
 
             /* =============================================
                TOP 3 SCORES
@@ -582,7 +542,6 @@ int main()
                     showingHighScores = false;
                 }
             }
-
 
             /* =============================================
                NORMAL GAME OVER
@@ -600,8 +559,7 @@ int main()
                         pipe,
                         coin,
                         screenWidth,
-                        screenHeight
-                    );
+                        screenHeight);
 
                     score = 0;
 
@@ -613,7 +571,6 @@ int main()
 
                     gameState = STATE_PLAYING;
                 }
-
 
                 /*
                  * ESC
@@ -629,13 +586,15 @@ int main()
                  */
                 if (IsKeyPressed(KEY_ESCAPE))
                 {
+                    StopGameMusic();
+                    PlayIntroMusic();
+
                     closingTimer = 0.0f;
 
                     gameState = STATE_CLOSING;
                 }
             }
         }
-
 
         /* =================================================
             DORAMAN
@@ -666,19 +625,20 @@ int main()
 
             if (IsKeyPressed(KEY_ESCAPE))
             {
+                StopGameMusic();
+                PlayIntroMusic();
+
                 UnloadPacPlayerTexture(&pac);
                 UnloadGhostTexture(&ghost);
                 SetWindowSize(screenWidth, screenHeight);
                 SetWindowPosition(
                     (GetMonitorWidth(GetCurrentMonitor()) - screenWidth) / 2,
-                    (GetMonitorHeight(GetCurrentMonitor()) - screenHeight) / 2
-                );
-                
+                    (GetMonitorHeight(GetCurrentMonitor()) - screenHeight) / 2);
+
                 closingTimer = 0.0f;
                 gameState = STATE_CLOSING;
             }
         }
-
 
         /* =================================================
             DORAMAN GAME OVER
@@ -734,19 +694,20 @@ int main()
 
             if (IsKeyPressed(KEY_ESCAPE))
             {
+                PlayTransitionSound();
+                StopIntroMusic();
+
                 UnloadPacPlayerTexture(&pac);
                 UnloadGhostTexture(&ghost);
                 SetWindowSize(screenWidth, screenHeight);
                 SetWindowPosition(
                     (GetMonitorWidth(GetCurrentMonitor()) - screenWidth) / 2,
-                    (GetMonitorHeight(GetCurrentMonitor()) - screenHeight) / 2
-                );
-                
+                    (GetMonitorHeight(GetCurrentMonitor()) - screenHeight) / 2);
+
                 closingTimer = 0.0f;
                 gameState = STATE_CLOSING;
             }
         }
-
 
         /* =================================================
            CLOSING SCENE
@@ -759,7 +720,6 @@ int main()
              */
             closingTimer += dt;
 
-
             /*
              * After 3 seconds:
              *
@@ -771,6 +731,7 @@ int main()
              */
             if (closingTimer >= CLOSING_TIME)
             {
+                PlayIntroMusic();
                 menu.state = MENU_SELECTION;
 
                 menu.timer = 0.0f;
@@ -783,13 +744,11 @@ int main()
             }
         }
 
-
         /* =================================================
            DRAW
            ================================================= */
 
         BeginDrawing();
-
 
         /* =================================================
            MENU DRAWING
@@ -801,7 +760,6 @@ int main()
 
             DrawMenu(&menu);
         }
-
 
         /* =================================================
            DORARUSH DRAWING
@@ -816,20 +774,18 @@ int main()
             if (backgroundTexture.id != 0)
             {
                 Rectangle source =
-                {
-                    0,
-                    0,
-                    (float)backgroundTexture.width,
-                    (float)backgroundTexture.height
-                };
+                    {
+                        0,
+                        0,
+                        (float)backgroundTexture.width,
+                        (float)backgroundTexture.height};
 
                 Rectangle destination =
-                {
-                    0,
-                    0,
-                    (float)screenWidth,
-                    (float)screenHeight
-                };
+                    {
+                        0,
+                        0,
+                        (float)screenWidth,
+                        (float)screenHeight};
 
                 DrawTexturePro(
                     backgroundTexture,
@@ -837,20 +793,17 @@ int main()
                     destination,
                     (Vector2){0, 0},
                     0.0f,
-                    WHITE
-                );
+                    WHITE);
             }
             else
             {
                 ClearBackground(SKYBLUE);
             }
 
-
             /*
              * Player
              */
             DrawPlayer(&player);
-
 
             /*
              * Pipes
@@ -860,10 +813,8 @@ int main()
                 DrawPipe(
                     &pipe[i],
                     pipeTexture,
-                    screenHeight
-                );
+                    screenHeight);
             }
-
 
             /*
              * KEEPING YOUR EXACT DORACAKE DRAWING
@@ -873,21 +824,17 @@ int main()
                 DrawCoin(&coin[i]);
             }
 
-
             /*
              * Score
              */
             DrawText(
                 TextFormat(
                     "Score: %d",
-                    score
-                ),
+                    score),
                 screenWidth / 2 - 60,
                 20,
                 30,
-                DARKGRAY
-            );
-
+                DARKGRAY);
 
             /* =============================================
                GAME OVER SCREEN
@@ -908,17 +855,14 @@ int main()
                         470,
                         220,
                         50,
-                        RED
-                    );
+                        RED);
 
                     DrawText(
                         "Enter your name:",
                         470,
                         300,
                         30,
-                        DARKGRAY
-                    );
-
+                        DARKGRAY);
 
                     /*
                      * Name input box
@@ -928,28 +872,22 @@ int main()
                         350,
                         420,
                         55,
-                        LIGHTGRAY
-                    );
-
+                        LIGHTGRAY);
 
                     DrawText(
                         playerName,
                         450,
                         365,
                         30,
-                        BLACK
-                    );
-
+                        BLACK);
 
                     DrawText(
                         "Press ENTER to save your score",
                         390,
                         440,
                         25,
-                        DARKGRAY
-                    );
+                        DARKGRAY);
                 }
-
 
                 /*
                  * =========================================
@@ -961,19 +899,15 @@ int main()
                 {
                     DrawHighScores(
                         highScores,
-                        screenWidth
-                    );
-
+                        screenWidth);
 
                     DrawText(
                         "Press ENTER to continue",
                         430,
                         380,
                         25,
-                        DARKGRAY
-                    );
+                        DARKGRAY);
                 }
-
 
                 /*
                  * =========================================
@@ -988,33 +922,26 @@ int main()
                         470,
                         280,
                         50,
-                        RED
-                    );
-
+                        RED);
 
                     DrawText(
                         "Press R to Restart",
                         450,
                         350,
                         25,
-                        DARKGRAY
-                    );
-
+                        DARKGRAY);
 
                     DrawText(
                         "Press ESC for Main Menu",
                         420,
                         390,
                         25,
-                        DARKGRAY
-                    );
+                        DARKGRAY);
                 }
             }
 
-
             DrawFPS(10, 10);
         }
-
 
         /* =================================================
            DORAMAN DRAWING
@@ -1030,12 +957,11 @@ int main()
 
             DrawTexturePro(
                 doramanBackgroundTexture,
-                (Rectangle){ 0, 0, (float)doramanBackgroundTexture.width, (float)doramanBackgroundTexture.height },
-                (Rectangle){ 0, 0, (float)doramanWidth, (float)doramanHeight },
-                (Vector2){ 0, 0 },
+                (Rectangle){0, 0, (float)doramanBackgroundTexture.width, (float)doramanBackgroundTexture.height},
+                (Rectangle){0, 0, (float)doramanWidth, (float)doramanHeight},
+                (Vector2){0, 0},
                 0.0f,
-                WHITE
-            );
+                WHITE);
 
             DrawMaze();
             DrawPellets();
@@ -1061,7 +987,6 @@ int main()
             }
         }
 
-
         /* =================================================
            CLOSING SCENE DRAWING
            ================================================= */
@@ -1071,20 +996,18 @@ int main()
             if (closingTexture.id != 0)
             {
                 Rectangle source =
-                {
-                    0,
-                    0,
-                    (float)closingTexture.width,
-                    (float)closingTexture.height
-                };
+                    {
+                        0,
+                        0,
+                        (float)closingTexture.width,
+                        (float)closingTexture.height};
 
                 Rectangle destination =
-                {
-                    0,
-                    0,
-                    (float)screenWidth,
-                    (float)screenHeight
-                };
+                    {
+                        0,
+                        0,
+                        (float)screenWidth,
+                        (float)screenHeight};
 
                 DrawTexturePro(
                     closingTexture,
@@ -1092,8 +1015,7 @@ int main()
                     destination,
                     (Vector2){0, 0},
                     0.0f,
-                    WHITE
-                );
+                    WHITE);
             }
             else
             {
@@ -1108,15 +1030,12 @@ int main()
                     screenWidth / 2 - 150,
                     screenHeight / 2,
                     50,
-                    WHITE
-                );
+                    WHITE);
             }
         }
 
-
         EndDrawing();
     }
-
 
     /* =====================================================
        CLEANUP
@@ -1128,8 +1047,7 @@ int main()
 
     UnloadTexture(closingTexture);
 
-    UnloadTexture(doramanBackgroundTexture);  
-
+    UnloadTexture(doramanBackgroundTexture);
 
     /*
      * KEEPING YOUR EXACT DORACAKE CLEANUP
@@ -1139,13 +1057,11 @@ int main()
         UnloadCoinTexture(&coin[i]);
     }
 
-
     /*
      * Menu cleanup
      */
     UnloadMenu(&menu);
-
-
+    UnloadGameAudio();
     CloseWindow();
 
     return 0;

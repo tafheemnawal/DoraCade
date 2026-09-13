@@ -21,7 +21,7 @@ void InitGhost(Ghost *ghost, int startRow, int startCol)
 
 void LoadGhostTexture(Ghost *ghost)
 {
-    ghost->texture = LoadTexture("../assets/textures/ghost.png");
+    ghost->texture = LoadTexture("../assets/textures/doraman/ghost.png");
 }
 
 void UnloadGhostTexture(Ghost *ghost)
