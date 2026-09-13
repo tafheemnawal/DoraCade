@@ -27,6 +27,8 @@ void LoadDoraInvadersTextures()
     bigLightTexture = LoadTexture(
         "../assets/textures/dora_invaders/big_light.png"
     );
+
+
 }
 
 static int GetGadgetPoints(GadgetType type)
@@ -91,11 +93,11 @@ Gadget CreateGadget()
 ); 
 
     // Starting position
-    gadget.position.x = GetRandomValue(80, GetScreenWidth() - 80);
+    gadget.position.x = GetRandomValue(250, GetScreenWidth() - 250);
     gadget.position.y = -50;
 
     // Falling speed
-   gadget.speed = GetRandomValue(80, 150);
+  gadget.speed = GetRandomValue(70, 120);
 
     // Points based on type
     gadget.points = GetGadgetPoints(gadget.type);
@@ -217,6 +219,7 @@ void DrawInvaderPlayer(
     );
 }
 
+
 // Bullet fired by player
 void FireInvaderBullet(
     InvaderBullet *bullet,
@@ -253,15 +256,15 @@ InvaderPlayer CreateInvaderPlayer(
     InvaderPlayer player;
 
     // Player size
-    player.bounds.width = 60;
-    player.bounds.height = 30;
+   player.bounds.width = 60;
+   player.bounds.height = 30;
 
     // Start position
     player.bounds.x =
         (screenWidth - player.bounds.width) / 2;
 
-    player.bounds.y =
-        screenHeight - player.bounds.height - 20;
+   player.bounds.y =
+    screenHeight - player.bounds.height - 10;
 
     // Movement speed
     player.speed = 500;
@@ -287,31 +290,24 @@ void InitDoraInvaders(
         );
 
 
-    // Create gadgets
-   for(int i = 0; i < 5; i++)
-{
-    game->gadgets[i].active = false;
-}
-
-
-// Start with only 3 gadgets
-for(int i = 0; i < 3; i++)
+    // Create all 5 gadgets with different entry times
+for(int i = 0; i < 5; i++)
 {
     game->gadgets[i] = CreateGadget();
 
     game->gadgets[i].position.x =
-        GetRandomValue(150, screenWidth - 150);
+        GetRandomValue(250, screenWidth - 250);
 
     game->gadgets[i].position.y =
-        -100 - (i * 250);
+        -100 - (i * 300);
 }
-
 
     // Reset score
     game->score = 0;
     game->misses = 0;
     game->gameOver = false;
     game->bullet.active = false;
+
 }
 // Update complete Dora Invaders game
 void UpdateDoraInvaders(
@@ -377,21 +373,21 @@ if(game->bullet.active)
     {
         if(game->gadgets[i].active)
         {
-            Rectangle gadgetRect =
+           Rectangle gadgetRect =
             {
-                game->gadgets[i].position.x - 20,
-                game->gadgets[i].position.y - 20,
-                40,
-                40
+                game->gadgets[i].position.x,
+                game->gadgets[i].position.y,
+                50,
+                50
             };
 
 
             Rectangle bulletRect =
             {
-                game->bullet.position.x - 3,
+                game->bullet.position.x - 5,
                 game->bullet.position.y,
-                6,
-                15
+                10,
+                20
             };
 
 
@@ -411,6 +407,7 @@ if(game->bullet.active)
     }
 }
 
+
 // Update gadgets
 for(int i = 0; i < 5; i++)
 {
@@ -420,19 +417,34 @@ for(int i = 0; i < 5; i++)
     );
 
 
-    // Gadget reached bottom (missed)
-    if(game->gadgets[i].position.y > GetScreenHeight())
-    {
-        game->misses++;
+// Gadget reached bottom (missed)
+if(game->gadgets[i].active &&
+   game->gadgets[i].position.y > GetScreenHeight())
+{
+    game->misses++;
 
-            if(game->misses >= 5)
+    if(game->misses >= 5)
     {
         game->gameOver = true;
     }
 
-        ResetGadget(
-            &game->gadgets[i]
-        );
+    game->gadgets[i].active = false;
+}
+}
+
+// Refill empty gadget slots
+for(int i = 0; i < 5; i++)
+{
+    if(!game->gadgets[i].active)
+    {
+        game->gadgets[i] = CreateGadget();
+
+        game->gadgets[i].position.x =
+            GetRandomValue(250, screenWidth - 250);
+
+        game->gadgets[i].position.y = -100;
+
+        break;
     }
 }
 }
@@ -450,15 +462,32 @@ void DrawDoraInvaders(
 // Draw bullet
 if(game.bullet.active)
 {
+    // Glow effect
+    DrawCircle(
+        game.bullet.position.x,
+        game.bullet.position.y + 8,
+        8,
+        Fade(BLUE, 0.4f)
+    );
+
+    // Main energy bullet
     DrawRectangle(
-        game.bullet.position.x - 3,
+        game.bullet.position.x - 5,
         game.bullet.position.y,
-        6,
-        15,
+        10,
+        20,
+        SKYBLUE
+    );
+
+    // Bright center
+    DrawRectangle(
+        game.bullet.position.x - 2,
+        game.bullet.position.y,
+        4,
+        20,
         WHITE
     );
 }
-
 
     // Draw gadgets
     for(int i = 0; i < 5; i++)

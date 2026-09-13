@@ -79,6 +79,7 @@ typedef struct
     int misses;
 
     bool gameOver;
+    float spawnTimer;
 
 } DoraInvadersGame;
 
