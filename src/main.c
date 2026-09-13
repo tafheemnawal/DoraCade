@@ -18,8 +18,6 @@
 
 #define PIPE_COUNT 4
 
-#define CLOSING_TIME 2.0f
-
 #define CLOSING_TIME 3.0f
 Sound shootSound;
 
@@ -31,7 +29,6 @@ typedef enum
     STATE_DORA_INVADERS,
     STATE_GAMEOVER,
     STATE_CLOSING,
-    STATE_DORAMAN,
     STATE_DORAMAN_GAMEOVER
 } GameState;
 
@@ -117,9 +114,7 @@ int main()
         screenHeight,
         "DoraCade");
 
-
     InitAudioDevice();
-
 
     /*
      * ESC is controlled by our game states.
@@ -142,35 +137,21 @@ int main()
      * DoraRush pipe texture
      */
     Texture2D pipeTexture =
-        LoadTexture(
-
-            "../assets/textures/dorarush/pipe.png");
-
-            "../assets/textures/pipe.png");
+    LoadTexture("../assets/textures/pipe.png");
 
 
     /*
      * Background
      */
     Texture2D backgroundTexture =
-        LoadTexture(
-
-            "../assets/textures/dorarush/background.png");
-
-            "../assets/textures/background.png");
+    LoadTexture("../assets/textures/background.png");
 
 
     /*
      * Closing scene
      */
     Texture2D closingTexture =
-        LoadTexture(
-
-            "../assets/textures/misc/doracade_closing.png");
-
-            "../assets/textures/doracade_closing.png"
-        );
-
+    LoadTexture("../assets/textures/doracade_closing.png");
     Texture2D invaderBackgroundTexture =
     LoadTexture(
         "../assets/textures/dora_invaders/background.png");
@@ -300,7 +281,7 @@ int main()
        ===================================================== */
 
     while (!WindowShouldClose())
-    {
+    {   TraceLog(LOG_INFO, "GAME LOOP RUNNING");
         float dt = GetFrameTime();
 
 
@@ -834,6 +815,7 @@ int main()
            ================================================= */
 
         BeginDrawing();
+        
 
         /* =================================================
            MENU DRAWING
@@ -1030,7 +1012,7 @@ int main()
         /* =================================================
    DORA INVADERS DRAWING
    ================================================= */
-else if (gameState == STATE_DORA_INVADERS)
+    else if (gameState == STATE_DORA_INVADERS)
 {
     if (invaderBackgroundTexture.id != 0)
     {
@@ -1042,12 +1024,39 @@ else if (gameState == STATE_DORA_INVADERS)
             (float)invaderBackgroundTexture.height
         };
 
+        Rectangle destination =
+        {
+            0,
+            0,
+            (float)screenWidth,
+            (float)screenHeight
+        };
+
+        DrawTexturePro(
+            invaderBackgroundTexture,
+            source,
+            destination,
+            (Vector2){0,0},
+            0.0f,
+            WHITE
+        );
+    }
+    else
+    {
+        ClearBackground(BLACK);
+    }
+
+    DrawDoraInvaders(
+        doraInvaders
+    );
+}
 
         /* =================================================
            DORAMAN DRAWING
            ================================================= */
 
-        else if (gameState == STATE_DORAMAN ||
+    
+           else if (gameState == STATE_DORAMAN ||
                  gameState == STATE_DORAMAN_GAMEOVER)
         {
             ClearBackground(BLACK);
@@ -1086,32 +1095,10 @@ else if (gameState == STATE_DORA_INVADERS)
                 }
             }
         }
+    
+    
 
-        Rectangle destination =
-        {
-            0,
-            0,
-            (float)screenWidth,
-            (float)screenHeight
-        };
-
-        DrawTexturePro(
-            invaderBackgroundTexture,
-            source,
-            destination,
-            (Vector2){0,0},
-            0.0f,
-            WHITE
-        );
-    }
-    else
-    {
-        ClearBackground(BLACK);
-    }
-
-    DrawDoraInvaders(
-        doraInvaders);
-}
+   
 
 
         /* =================================================
