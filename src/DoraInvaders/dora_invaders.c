@@ -9,23 +9,23 @@ static Texture2D bigLightTexture;
 void LoadDoraInvadersTextures()
 {
     doracakeTexture = LoadTexture(
-        "../assets/textures/dora_invaders/doracake.png"
+        "assets/textures/dora_invaders/doracake.png"
     );
 
     bambooCopterTexture = LoadTexture(
-        "../assets/textures/dora_invaders/bamboo_copter.png"
+        "assets/textures/dora_invaders/bamboo_copter.png"
     );
 
     timeMachineTexture = LoadTexture(
-        "../assets/textures/dora_invaders/time_machine.png"
+        "assets/textures/dora_invaders/time_machine.png"
     );
 
     smallLightTexture = LoadTexture(
-        "../assets/textures/dora_invaders/small_light.png"
+        "assets/textures/dora_invaders/small_light.png"
     );
 
     bigLightTexture = LoadTexture(
-        "../assets/textures/dora_invaders/big_light.png"
+        "assets/textures/dora_invaders/big_light.png"
     );
 
 
@@ -541,4 +541,5 @@ if(game.gameOver)
     );
 }
 }
+
 

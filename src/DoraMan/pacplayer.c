@@ -20,7 +20,7 @@ void InitPacPlayer(PacPlayer *pac) {
 
 void LoadPacPlayerTexture(PacPlayer *pac)
 {
-    pac->texture = LoadTexture("../assets/textures/doraman/pacplayer.png");
+    pac->texture = LoadTexture("assets/textures/doraman/pacplayer.png");
 }
 
 void UnloadPacPlayerTexture(PacPlayer *pac)

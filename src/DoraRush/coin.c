@@ -11,7 +11,7 @@ void InitCoin(Coin *coin, Pipe *pipe)
 
 void LoadCoinTexture(Coin *coin)
 {
-    coin->texture = LoadTexture("../assets/textures/dorarush/doracake.png");
+    coin->texture = LoadTexture("assets/textures/dorarush/doracake.png");
 }
 
 void UnloadCoinTexture(Coin *coin)

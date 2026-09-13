@@ -9,13 +9,13 @@ void InitGameAudio(void)
 {
     InitAudioDevice();
 
-    introMusic = LoadMusicStream("../assets/sounds/intro_music.mp3");
+    introMusic = LoadMusicStream("assets/sounds/intro_music.mp3");
     introMusic.looping = 1;
 
-    gameMusic = LoadMusicStream("../assets/sounds/transition.mp3");
+    gameMusic = LoadMusicStream("assets/sounds/transition.mp3");
     gameMusic.looping = 1;
 
-    transitionSound = LoadSound("../assets/sounds/transition.mp3");
+    transitionSound = LoadSound("assets/sounds/transition.mp3");
 }
 
 void UpdateGameAudio(void)

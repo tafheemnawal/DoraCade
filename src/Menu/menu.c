@@ -34,7 +34,7 @@ void InitMenu(Menu *menu, int screenWidth, int screenHeight)
      * Game-selection background
      */
     menu->background = LoadTexture(
-        "../assets/textures/misc/menu_background.png"
+        "assets/textures/misc/menu_background.png"
     );
 }
 
