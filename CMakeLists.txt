@@ -8,8 +8,11 @@ find_package(raylib REQUIRED)
 
 add_executable(DoraCade
     src/main.c
+
     src/Audio/audio.c
-    src/GadgetInvaders/gadget_invaders.c
+
+    src/DoraInvaders/dora_invaders.c
+
     src/DoraRush/player.c
     src/DoraRush/pipe.c
     src/DoraRush/coin.c
@@ -22,3 +25,7 @@ add_executable(DoraCade
     src/DoraMan/doraman_highscore.c
 )
 target_link_libraries(DoraCade PRIVATE raylib)
+
+# Copy assets folder after build
+file(COPY ${CMAKE_SOURCE_DIR}/assets
+     DESTINATION ${CMAKE_BINARY_DIR})

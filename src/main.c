@@ -14,13 +14,21 @@
 #include "DoraMan/ghost.h"
 #include "DoraMan/doraman_highscore.h"
 
+#include "DoraInvaders/dora_invaders.h"
+
 #define PIPE_COUNT 4
+
 #define CLOSING_TIME 2.0f
+
+#define CLOSING_TIME 3.0f
+Sound shootSound;
 
 typedef enum
 {
     STATE_MENU,
-    STATE_PLAYING,
+    STATE_DORARUSH,
+    STATE_DORAMAN,
+    STATE_DORA_INVADERS,
     STATE_GAMEOVER,
     STATE_CLOSING,
     STATE_DORAMAN,
@@ -74,6 +82,7 @@ void ResetDoraRush(
     }
 }
 
+
 /* =========================================================
    RESET DORAMAN
    ========================================================= */
@@ -85,6 +94,8 @@ void ResetDoraMan(PacPlayer *pac, Ghost *ghost, int startRow, int startCol)
     InitGhost(ghost, startRow, startCol);
 }
 
+
+
 /* =========================================================
    MAIN
    ========================================================= */
@@ -93,6 +104,9 @@ int main()
 {
     const int screenWidth = 1280;
     const int screenHeight = 720;
+
+
+
 
     /* =====================================================
        WINDOW
@@ -103,6 +117,10 @@ int main()
         screenHeight,
         "DoraCade");
 
+
+    InitAudioDevice();
+
+
     /*
      * ESC is controlled by our game states.
      * It must NOT close the Raylib window.
@@ -110,8 +128,11 @@ int main()
     SetExitKey(KEY_NULL);
 
     SetTargetFPS(60);
+
     InitGameAudio();
     PlayIntroMusic();
+
+
 
     /* =====================================================
        TEXTURES
@@ -122,21 +143,44 @@ int main()
      */
     Texture2D pipeTexture =
         LoadTexture(
+
             "../assets/textures/dorarush/pipe.png");
+
+            "../assets/textures/pipe.png");
+
 
     /*
      * Background
      */
     Texture2D backgroundTexture =
         LoadTexture(
+
             "../assets/textures/dorarush/background.png");
+
+            "../assets/textures/background.png");
+
 
     /*
      * Closing scene
      */
     Texture2D closingTexture =
         LoadTexture(
+
             "../assets/textures/misc/doracade_closing.png");
+
+            "../assets/textures/doracade_closing.png"
+        );
+
+    Texture2D invaderBackgroundTexture =
+    LoadTexture(
+        "../assets/textures/dora_invaders/background.png");
+     
+        LoadDoraInvadersTextures();
+
+        shootSound = LoadSound(
+    "../assets/sounds/shoot.wav"
+     );
+
 
     /* =====================================================
        DORARUSH OBJECTS
@@ -150,6 +194,14 @@ int main()
      * KEEPING YOUR EXACT DORACAKE SYSTEM
      */
     Coin coin[PIPE_COUNT];
+
+
+    /* =====================================================
+   DORA INVADERS OBJECTS
+   ===================================================== */
+
+    DoraInvadersGame doraInvaders;
+
 
     /* =====================================================
        MENU
@@ -173,6 +225,7 @@ int main()
         screenWidth,
         screenHeight);
 
+
     /*
      * IMPORTANT:
      *
@@ -182,6 +235,7 @@ int main()
      *
      * This is your original system.
      */
+
     for (int i = 0; i < PIPE_COUNT; i++)
     {
         LoadCoinTexture(&coin[i]);
@@ -230,6 +284,7 @@ int main()
 
     int doramanScore = 0;
 
+
     /* =====================================================
        GAME STATE
        ===================================================== */
@@ -248,7 +303,10 @@ int main()
     {
         float dt = GetFrameTime();
 
+
         UpdateGameAudio();
+
+
 
         /* =================================================
            MENU
@@ -288,6 +346,7 @@ int main()
                         coin,
                         screenWidth,
                         screenHeight);
+
                     /*
                      * Reset score
                      */
@@ -305,18 +364,26 @@ int main()
                     /*
                      * Start DoraRush
                      */
-                    gameState = STATE_PLAYING;
+                    gameState = STATE_DORARUSH;
                 }
+                /* =================================================
+
 
                 /* =========================================
                    DORAMAN
                    ========================================= */
+
+            /* =========================================
+               DORAMAZE
+               ========================================= */
+
 
                 else if (selectedGame == 1)
                 {
                     StopIntroMusic();
                     PlayTransitionSound();
                     PlayGameMusic();
+
 
                     /*
                      * Reset DoraMan
@@ -345,15 +412,18 @@ int main()
                     gameState = STATE_DORAMAN;
                 }
 
-                /* =========================================
-                   GADGET INVADERS
-                   ========================================= */
 
+                /* =========================================
+                   DORA INVADERS
+                   ========================================= */
                 else if (selectedGame == 2)
                 {
-                    /*
-                     * Gadget Invaders will be connected here later.
-                     */
+                    InitDoraInvaders(
+                        &doraInvaders,
+                        screenWidth,
+                        screenHeight);
+
+                    gameState = STATE_DORA_INVADERS;
                 }
             }
         }
@@ -362,7 +432,7 @@ int main()
            DORARUSH
            ================================================= */
 
-        else if (gameState == STATE_PLAYING)
+        else if (gameState == STATE_DORARUSH)
         {
             /*
              * Update player
@@ -441,6 +511,20 @@ int main()
                 }
             }
         }
+
+
+        /* =================================================
+   DORA INVADERS UPDATE
+   ================================================= */
+
+        else if (gameState == STATE_DORA_INVADERS)
+        {
+            UpdateDoraInvaders(
+                &doraInvaders,
+                screenWidth,
+                dt);
+        }
+
 
         /* =================================================
            GAME OVER
@@ -569,7 +653,7 @@ int main()
                     playerName[0] = '\0';
                     nameLength = 0;
 
-                    gameState = STATE_PLAYING;
+                    gameState = STATE_DORARUSH;
                 }
 
                 /*
@@ -596,7 +680,7 @@ int main()
             }
         }
 
-        /* =================================================
+        /* ===============================================
             DORAMAN
            ================================================= */
 
@@ -709,6 +793,7 @@ int main()
             }
         }
 
+
         /* =================================================
            CLOSING SCENE
            ================================================= */
@@ -765,7 +850,7 @@ int main()
            DORARUSH DRAWING
            ================================================= */
 
-        else if (gameState == STATE_PLAYING ||
+        else if (gameState == STATE_DORARUSH ||
                  gameState == STATE_GAMEOVER)
         {
             /*
@@ -942,6 +1027,21 @@ int main()
 
             DrawFPS(10, 10);
         }
+        /* =================================================
+   DORA INVADERS DRAWING
+   ================================================= */
+else if (gameState == STATE_DORA_INVADERS)
+{
+    if (invaderBackgroundTexture.id != 0)
+    {
+        Rectangle source =
+        {
+            0,
+            0,
+            (float)invaderBackgroundTexture.width,
+            (float)invaderBackgroundTexture.height
+        };
+
 
         /* =================================================
            DORAMAN DRAWING
@@ -986,6 +1086,33 @@ int main()
                 }
             }
         }
+
+        Rectangle destination =
+        {
+            0,
+            0,
+            (float)screenWidth,
+            (float)screenHeight
+        };
+
+        DrawTexturePro(
+            invaderBackgroundTexture,
+            source,
+            destination,
+            (Vector2){0,0},
+            0.0f,
+            WHITE
+        );
+    }
+    else
+    {
+        ClearBackground(BLACK);
+    }
+
+    DrawDoraInvaders(
+        doraInvaders);
+}
+
 
         /* =================================================
            CLOSING SCENE DRAWING
@@ -1047,6 +1174,7 @@ int main()
 
     UnloadTexture(closingTexture);
 
+
     UnloadTexture(doramanBackgroundTexture);
 
     /*
@@ -1061,7 +1189,10 @@ int main()
      * Menu cleanup
      */
     UnloadMenu(&menu);
+
     UnloadGameAudio();
+
+
     CloseWindow();
 
     return 0;
